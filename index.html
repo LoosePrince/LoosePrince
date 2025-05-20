@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light-mode">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>树梢的个人卡片</title>
+    <meta http-equiv="Permissions-Policy" content="accelerometer=(), gyroscope=(), encrypted-media=()">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- 加载动画 -->
+        <div id="loading-screen" class="fixed inset-0 bg-white flex items-center justify-center z-50">
+            <div class="text-center flex flex-col items-center">
+                <div class="avatar-container mb-4">
+                    <img src="http://q1.qlogo.cn/g?b=qq&nk=1377820366&s=640" alt="头像" class="loading-avatar">
+                </div>
+                <div class="loader mb-4"></div>
+                <p class="text-xl text-gray-600 animate__animated animate__pulse animate__infinite">正在准备精彩内容...</p>
+            </div>
+        </div>
+
+        <!-- 主内容 -->
+        <div id="content" class="opacity-0 transition-opacity duration-1000">
+            <!-- 欢迎部分 -->
+            <section id="welcome" class="relative overflow-hidden bg-gradient-to-br from-pink-50 to-blue-50 rounded-2xl shadow-lg p-8 mb-12">
+                <div class="absolute -top-20 -right-20 w-40 h-40 bg-yellow-300 rounded-full opacity-20"></div>
+                <div class="absolute -bottom-16 -left-16 w-32 h-32 bg-blue-300 rounded-full opacity-20"></div>
+                
+                <!-- 夜间模式切换按钮 -->
+                <button id="theme-toggle" class="absolute top-4 right-4 w-12 h-12 bg-white dark:bg-gray-800 rounded-full shadow-md flex items-center justify-center text-yellow-500 dark:text-blue-300 transition-all duration-300 z-10">
+                    <i id="theme-icon-sun" class="fas fa-sun text-xl"></i>
+                    <i id="theme-icon-moon" class="fas fa-moon text-xl"></i>
+                </button>
+                
+                <div class="flex items-center mb-8">
+                    <div class="avatar-container mr-6">
+                        <img src="http://q1.qlogo.cn/g?b=qq&nk=1377820366&s=640" alt="头像" class="welcome-avatar">
+                    </div>
+                    <div>
+                        <h1 class="text-4xl md:text-6xl font-bold text-gray-800 mb-2 tracking-tight reveal-item">
+                            客官，里面请 <span class="wave inline-block">~</span>
+                        </h1>
+                        <h2 class="text-2xl md:text-3xl font-medium text-gray-500 mb-8 reveal-item">我是<span class="text-pink-600">树梢</span></h2>
+                    </div>
+                </div>
+                
+                <div class="w-20 h-1 bg-gradient-to-r from-pink-500 to-blue-500 rounded-full mb-8 reveal-item"></div>
+            </section>
+
+            <!-- 个人简介 -->
+            <section id="about" class="bg-white rounded-2xl shadow-lg p-8 mb-12 transform hover:scale-[1.01] transition-all duration-300 relative overflow-hidden reveal-section">
+                <div class="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-pink-500 to-blue-500"></div>
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-blue-500">简介</span>
+                    <div class="flex-grow h-px bg-gray-200 ml-4"></div>
+                </h2>
+
+                <p class="text-lg text-gray-500 leading-relaxed mb-6">
+                    我出生在2004年10月12日，现在大专在读
+                </p>
+                
+
+                <p class="text-lg text-gray-500 leading-relaxed mb-6">
+                    我热爱任何有趣的事物，包括但不限于：
+                </p>
+                
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+                    <div class="interest-item">
+                        <i class="fas fa-paint-brush text-2xl text-pink-500"></i>
+                        <span>绘画</span>
+                    </div>
+                    <div class="interest-item">
+                        <i class="fas fa-palette text-2xl text-purple-500"></i>
+                        <span>UI设计</span>
+                    </div>
+                    <div class="interest-item">
+                        <i class="fas fa-brain text-2xl text-blue-500"></i>
+                        <span>AI</span>
+                    </div>
+                    <div class="interest-item">
+                        <i class="fas fa-code text-2xl text-green-500"></i>
+                        <span>编程</span>
+                    </div>
+                    <div class="interest-item">
+                        <i class="fas fa-book text-2xl text-yellow-600"></i>
+                        <span>看书</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 能力选项卡 -->
+            <section id="skills" class="bg-white rounded-2xl shadow-lg p-8 mb-12 transform hover:scale-[1.01] transition-all duration-300 relative overflow-hidden reveal-section">
+                <div class="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-blue-500 to-green-500"></div>
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-green-500">专业能力</span>
+                    <div class="flex-grow h-px bg-gray-200 ml-4"></div>
+                </h2>
+                
+                <div class="skills-tabs">
+                    <div class="skills-tab-header mb-6">
+                        <button class="skill-tab-btn active" data-tab="design">设计能力</button>
+                        <button class="skill-tab-btn" data-tab="programming">编程能力</button>
+                        <button class="skill-tab-btn" data-tab="other">其他能力</button>
+                    </div>
+                    
+                    <div class="skills-tab-content">
+                        <!-- 设计能力标签页 -->
+                        <div class="skill-tab-pane active" id="design-tab">
+                            <div class="skill-item">
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-base font-medium text-gray-500">UI/UX设计</span>
+                                    <span class="text-sm font-medium text-gray-500">60%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" style="width: 60%"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">熟练使用设计工具，擅长交互设计与视觉体验优化</p>
+                            </div>
+                            
+                            <div class="skill-item mt-6">
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-base font-medium text-gray-500">平面设计</span>
+                                    <span class="text-sm font-medium text-gray-500">75%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" style="width: 75%"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">熟悉Photoshop、Illustrator，擅长品牌设计与视觉创意表达</p>
+                            </div>
+                            
+                            <div class="skill-item mt-6">
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-base font-medium text-gray-500">插画</span>
+                                    <span class="text-sm font-medium text-gray-500">25%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" style="width: 25%"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">不算擅长数字插画创作</p>
+                            </div>
+                        </div>
+                        
+                        <!-- 编程能力标签页 -->
+                        <div class="skill-tab-pane" id="programming-tab">
+                            <div class="skill-item">
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-base font-medium text-gray-500">前端开发</span>
+                                    <span class="text-sm font-medium text-gray-500">85%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" style="width: 85%"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">熟练掌握HTML、CSS、JavaScript，熟悉Vue等前端框架</p>
+                            </div>
+                            
+                            <div class="skill-item mt-6">
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-base font-medium text-gray-500">Python</span>
+                                    <span class="text-sm font-medium text-gray-500">80%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" style="width: 80%"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">掌握Python数据分析与处理</p>
+                            </div>
+                            
+                            <div class="skill-item mt-6">
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-base font-medium text-gray-500">后端开发</span>
+                                    <span class="text-sm font-medium text-gray-500">50%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" style="width: 50%"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">了解Node.js、PHP，能够搭建基础后端服务</p>
+                            </div>
+
+                            <div class="skill-item mt-6">
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-base font-medium text-gray-500">数据库</span>
+                                    <span class="text-sm font-medium text-gray-500">60%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" style="width: 60%"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">了解MySQL、SQL Server等数据库</p>
+                            </div>
+
+                            <!-- <div class="skill-item mt-6">
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-base font-medium text-gray-500">AI</span>
+                                    <span class="text-sm font-medium text-gray-500">80%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" style="width: 80%"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">了解AI相关技术，如机器学习、深度学习等</p>
+                            </div> -->
+                        </div>
+                        
+                        <!-- 其他能力标签页 -->
+                        <div class="skill-tab-pane" id="other-tab">
+                            <div class="skill-item">
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-base font-medium text-gray-500">项目管理</span>
+                                    <span class="text-sm font-medium text-gray-500">75%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" style="width: 75%"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">熟悉敏捷开发流程，有小型团队协作经验</p>
+                            </div>
+                            
+                            <div class="skill-item mt-6">
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-base font-medium text-gray-500">写作能力</span>
+                                    <span class="text-sm font-medium text-gray-500">85%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" style="width: 85%"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">善于内容创作与技术文档编写，有一定的文字功底</p>
+                            </div>
+                            
+                            <div class="skill-item mt-6">
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-base font-medium text-gray-500">沟通协作</span>
+                                    <span class="text-sm font-medium text-gray-500">90%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" style="width: 90%"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">优秀的团队协作能力，擅长沟通</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 text-center">
+                    <p>技能是一个一个学的，经验是一点一点积累的</p>
+                </div>
+            </section>
+
+            <!-- 经历时间轴 -->
+            <section id="experience" class="bg-white rounded-2xl shadow-lg p-8 mb-12 transform hover:scale-[1.01] transition-all duration-300 relative overflow-hidden reveal-section">
+                <div class="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-purple-500 to-indigo-500"></div>
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-indigo-500">我的经历</span>
+                    <div class="flex-grow h-px bg-gray-200 ml-4"></div>
+                </h2>
+                
+                <div class="timeline-container">
+                    <!-- 时间轴 -->
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-date">2020</div>
+                            <div class="timeline-content">
+                                <h3 class="text-xl font-semibold text-gray-800">自学编程</h3>
+                                <p class="text-gray-500">开始学习前端技术</p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-date">2021</div>
+                            <div class="timeline-content">
+                                <h3 class="text-xl font-semibold text-gray-800">开始接触设计</h3>
+                                <p class="text-gray-500">初次尝试UI设计</p>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-branch">
+                            <div class="timeline-item-branch">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-date">2023</div>
+                                <div class="timeline-content">
+                                    <h3 class="text-xl font-semibold text-gray-800">构建个人网站</h3>
+                                    <p class="text-gray-500">深入学习前端技术，构建个人网站</p>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-item-branch">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-date">2023</div>
+                                <div class="timeline-content">
+                                    <h3 class="text-xl font-semibold text-gray-800">实习</h3>
+                                    <p class="text-gray-500">在本地软件公司，积累实战经验</p>
+                                </div>
+                            </div>
+
+                            <div class="timeline-item-branch">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-date">2023</div>
+                                <div class="timeline-content">
+                                    <h3 class="text-xl font-semibold text-gray-800">大学</h3>
+                                    <p class="text-gray-500">进入大学，开始新的生活</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-branch">
+                            <div class="timeline-item-branch">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-date">2024</div>
+                                <div class="timeline-content">
+                                    <h3 class="text-xl font-semibold text-gray-800">参与开源项目</h3>
+                                    <p class="text-gray-500">加入GitHub社区，为开源项目贡献代码与设计</p>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-item-branch">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-date">2024</div>
+                                <div class="timeline-content">
+                                    <h3 class="text-xl font-semibold text-gray-800">全栈开发</h3>
+                                    <p class="text-gray-500">开始全栈开发学习，打造个人作品集网站</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <div class="timeline-dot timeline-dot-future"></div>
+                            <div class="timeline-date">未来</div>
+                            <div class="timeline-content">
+                                <h3 class="text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500">持续成长</h3>
+                                <p class="text-gray-500">不断探索新技术与设计趋势，追求创意与技术的完美结合</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 text-center">
+                    <p class="text-gray-500">我会一直成长的！</p>
+                </div>
+            </section>
+
+            <!-- 时间轴详细内容模态框 -->
+            <div id="timeline-modal" class="timeline-detail-modal">
+                <div class="timeline-detail-content">
+                    <div class="timeline-detail-close">
+                        <i class="fas fa-times"></i>
+                    </div>
+                    <div class="timeline-detail-year"></div>
+                    <h3 class="text-2xl font-bold mb-3 timeline-detail-title"></h3>
+                    <p class="timeline-detail-description mb-4"></p>
+
+                    <div class="timeline-detail-skills mb-4">
+                        <!-- 技能标签将通过JS动态添加 -->
+                    </div>
+
+                    <div class="timeline-detail-images">
+                        <!-- 图片将通过JS动态添加 -->
+                    </div>
+                    
+                    <div class="mt-6 timeline-detail-achievements">
+                        <h4 class="text-lg font-semibold mb-2">成就与收获</h4>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <!-- 成就列表将通过JS动态添加 -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 游戏偏好 -->
+            <section id="games" class="bg-white rounded-2xl shadow-lg p-8 mb-12 transform hover:scale-[1.01] transition-all duration-300 relative overflow-hidden reveal-section">
+                <div class="absolute top-0 right-0 w-2 h-full bg-gradient-to-b from-purple-500 to-indigo-500"></div>
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-indigo-500">喜欢玩的游戏</span>
+                    <div class="flex-grow h-px bg-gray-200 ml-4"></div>
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="game-card" data-game="原神">
+                        <div class="game-icon">
+                            <!-- <i class="fas fa-gamepad"></i> -->
+                            <img src="https://fastcdn.mihoyo.com/static-resource-v2/2025/03/14/516186272072a512a460c81222aecf1d_2940332403691814685.jpg" alt="">
+                        </div>
+                        <h3>原神</h3>
+                    </div>
+                    <div class="game-card" data-game="崩铁">
+                        <div class="game-icon">
+                            <!-- <i class="fas fa-gamepad"></i> -->
+                            <img src="https://fastcdn.mihoyo.com/static-resource-v2/2025/03/14/fad00b3d31fb11ea3b864bb4625e1ea7_1732118803803772703.jpg" alt="">
+                        </div>
+                        <h3>崩铁</h3>
+                    </div>
+                    <div class="game-card" data-game="绝区零">
+                        <div class="game-icon">
+                            <!-- <i class="fas fa-gamepad"></i> -->
+                            <img src="https://fastcdn.mihoyo.com/static-resource-v2/2025/03/14/09b53fb755412221fedda26863abdfd0_6284584230170612025.png" alt="">
+                        </div>
+                        <h3>绝区零</h3>
+                    </div>
+                    <div class="game-card" data-game="月圆之夜">
+                        <div class="game-icon">
+                            <!-- <i class="fas fa-moon"></i> -->
+                            <img src="https://www.yueyuanzhiye.com/images/v5/logo.png" alt="">
+                        </div>
+                        <h3>月圆之夜</h3>
+                    </div>
+                    <div class="game-card" data-game="MC">
+                        <div class="game-icon">
+                            <!-- <i class="fas fa-cube"></i> -->
+                            <img src="https://www.minecraft.net/content/dam/minecraftnet/franchise/logos/Homepage_Download-Launcher_Creeper-Logo_500x500.png" alt="">
+                        </div>
+                        <h3>MC</h3>
+                    </div>
+                </div>
+                <div class="mt-4 text-center">
+                    <p class="text-gray-500">如果你也对这些游戏感兴趣的话，欢迎来找我玩！</p>
+                </div>
+            </section>
+
+            <!-- 联系方式 -->
+            <section id="contact" class="bg-white rounded-2xl shadow-lg p-8 mb-12 transform hover:scale-[1.01] transition-all duration-300 reveal-section">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-teal-500">联系方式</span>
+                    <div class="flex-grow h-px bg-gray-200 ml-4"></div>
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="contact-card">
+                        <i class="fab fa-weixin text-3xl text-green-500"></i>
+                        <div>
+                            <h3 class="text-lg font-semibold">微信</h3>
+                            <p>Qr2051134</p>
+                        </div>
+                        <div class="copy-btn" data-text="Qr2051134">
+                            <i class="far fa-copy"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <i class="fab fa-qq text-3xl text-blue-500"></i>
+                        <div>
+                            <h3 class="text-lg font-semibold">QQ</h3>
+                            <p>1377820366</p>
+                        </div>
+                        <div class="copy-btn" data-text="1377820366">
+                            <i class="far fa-copy"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <i class="fab fa-github text-3xl text-gray-800"></i>
+                        <div>
+                            <h3 class="text-lg font-semibold">GitHub</h3>
+                            <p>LoosePrince</p>
+                        </div>
+                        <div class="copy-btn" data-text="LoosePrince">
+                            <i class="far fa-copy"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <i class="far fa-envelope text-3xl text-red-500"></i>
+                        <div>
+                            <h3 class="text-lg font-semibold">邮箱</h3>
+                            <p>1377820366@qq.com</p>
+                        </div>
+                        <div class="copy-btn" data-text="1377820366@qq.com">
+                            <i class="far fa-copy"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 text-center">
+                    <p class="text-gray-500">如果没有什么事的话，请勿打扰哦~</p>
+                </div>
+            </section>
+
+            <!-- 网易云音乐 -->
+            <section id="music-section" class="bg-white rounded-2xl shadow-lg p-8 mb-12 transform hover:scale-[1.01] transition-all duration-300 reveal-section">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-yellow-500">我的音乐</span>
+                    <div class="flex-grow h-px bg-gray-200 ml-4"></div>
+                </h2>
+                
+                <div class="flex justify-center">
+                    <div class="custom-music-player bg-white rounded-lg shadow-lg p-4 w-full max-w-md">
+                        <div class="flex items-center space-x-4">
+                            <button id="play-pause" class="w-12 h-12 bg-gradient-to-r from-red-500 to-yellow-500 rounded-full flex items-center justify-center text-white hover:scale-110 transition-transform">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <div class="flex-grow">
+                                <div class="text-lg font-semibold text-gray-800">明天你好</div>
+                                <div class="text-sm text-gray-500">SER - 钢琴独奏版</div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div class="relative h-2 bg-gray-200 rounded-full cursor-pointer" id="progress-container">
+                                <div id="progress-bar" class="absolute h-full bg-gradient-to-r from-red-500 to-yellow-500 rounded-full" style="width: 0%"></div>
+                                <div id="progress-handle" class="absolute w-4 h-4 bg-white rounded-full shadow-md top-1/2 transform -translate-y-1/2 -translate-x-1/2 cursor-grab" style="left: 0%"></div>
+                            </div>
+                            <div class="flex justify-between mt-2 text-sm text-gray-500">
+                                <span id="current-time">00:00</span>
+                                <span id="duration">00:00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 text-center">
+                    <p class="text-gray-500">有关 《明天你好》 这首歌</p>
+                    <p class="text-gray-500">这首歌是我在5年级的时候听的，当时我还在上小学，这首歌的旋律和歌词在那时让我产生了一种很奇妙的感觉</p>
+                    <p class="text-gray-500">那种感觉我到现在也无法忘却，因为网易云没有我喜欢的版本，所以在此推荐的是钢琴的纯音乐版。</p>
+                </div>
+            </section>
+
+            <!-- 结语 -->
+            <section id="footer" class="bg-gradient-to-br from-gray-800 to-gray-900 text-white rounded-2xl shadow-lg p-8 mb-12 reveal-section">
+                <div class="max-w-3xl mx-auto text-center">
+                    <p class="text-lg mb-4">在某种意义上来说热爱生活？</p>
+                    <p class="text-lg font-light italic">最后的最后，感谢你的喜欢，感谢你点进这个无人问津的小角落</p>
+                    
+                    <div class="mt-8 pt-6 border-t border-gray-700">
+                        <p class="text-sm text-gray-400">&copy; 2023 树梢. 保留所有权利.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- 悬浮音乐播放器 -->
+    <div id="music-player" class="fixed bottom-4 right-4 bg-white rounded-full shadow-lg p-3 flex items-center space-x-2 opacity-0 transform translate-y-8 transition-all duration-500">
+        <button id="toggle-play" class="w-10 h-10 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center text-white hover:scale-110 transition-transform">
+            <i class="fas fa-play"></i>
+        </button>
+        <div class="text-sm font-medium text-gray-500 hidden md:block">明天你好</div>
+        <button id="scroll-to-music" class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white hover:scale-110 transition-transform">
+            <i class="fas fa-music"></i>
+        </button>
+    </div>
+    
+    <!-- 返回顶部按钮 -->
+    <button id="back-to-top" class="fixed bottom-4 left-4 w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white opacity-0 transition-opacity duration-300">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 
