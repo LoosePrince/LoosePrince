@@ -12,7 +12,7 @@
 }
 
 /* 夜间模式变量 */
-.dark-mode {
+.dark {
   --primary-color: #ec4899;
   --secondary-color: #3b82f6;
   --accent-color: #8b5cf6;
@@ -36,96 +36,106 @@ body {
   transition: background-color 0.5s ease, color 0.5s ease;
 }
 
+#loading-screen p {
+  margin-top: 20px;
+  font-size: 16px;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
 /* 夜间模式全局样式 */
-.dark-mode body {
+.dark body {
   background-color: #111827;
 }
 
-.dark-mode #loading-screen {
+.dark #loading-screen {
   background-color: #111827;
 }
 
-.dark-mode #loading-screen p {
+.dark #loading-screen p {
+  background-color: #1f2937;
   color: #e5e7eb;
 }
 
-.dark-mode .loader {
+.dark .loader {
   border-color: #374151;
   border-top-color: var(--primary-color);
 }
 
-.dark-mode #welcome {
+.dark #welcome {
   background: linear-gradient(to bottom right, #2a2550, #1e3a8a);
 }
 
-.dark-mode #welcome h1, 
-.dark-mode #welcome h2 {
+.dark #welcome h1, 
+.dark #welcome h2 {
   color: #f3f4f6;
 }
 
-.dark-mode section {
+.dark section {
   background-color: #1f2937;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-.dark-mode h2 .text-transparent {
+.dark h2 .text-transparent {
   -webkit-text-fill-color: transparent;
 }
 
-.dark-mode .interest-item,
-.dark-mode .game-card,
-.dark-mode .contact-card,
-.dark-mode .timeline-content {
+.dark .interest-item,
+.dark .game-card,
+.dark .contact-card,
+.dark .timeline-content {
   background-color: #374151;
   color: #f3f4f6;
 }
 
-.dark-mode .interest-item span,
-.dark-mode .game-card h3,
-.dark-mode .contact-card h3,
-.dark-mode .timeline-content h3 {
+.dark .interest-item span,
+.dark .game-card h3,
+.dark .contact-card h3,
+.dark .timeline-content h3 {
   color: #f3f4f6;
 }
 
-.dark-mode .timeline-content p,
-.dark-mode .skill-item p {
+.dark .timeline-content p,
+.dark .skill-item p {
   color: #d1d5db;
 }
 
-.dark-mode .copy-btn {
+.dark .copy-btn {
   background-color: #4b5563;
   color: #f3f4f6;
 }
 
-.dark-mode .copy-btn:hover {
+.dark .copy-btn:hover {
   background-color: #6b7280;
 }
 
-.dark-mode #footer {
+.dark #footer {
   background: linear-gradient(to bottom right, #111827, #1f2937);
 }
 
-.dark-mode #music-player {
+.dark #music-player {
   background-color: #374151;
 }
 
-.dark-mode #music-player div {
+.dark #music-player div {
   color: #f3f4f6;
 }
 
-.dark-mode .skill-progress-bg {
+.dark .skill-progress-bg {
   background-color: #4b5563;
 }
 
-.dark-mode .skills-tab-btn {
+.dark .skills-tab-btn {
   color: #9ca3af;
 }
 
-.dark-mode .skills-tab-btn.active {
+.dark .skills-tab-btn.active {
   color: var(--secondary-color);
 }
 
-.dark-mode .skills-tab-btn:hover {
+.dark .skills-tab-btn:hover {
   color: #e5e7eb;
 }
 
@@ -138,15 +148,6 @@ body {
   border-radius: 50%;
   margin: 0 auto;
   animation: spin 1s linear infinite;
-}
-
-#loading-screen p {
-  margin-top: 20px;
-  font-size: 16px;
-  border-radius: 10px;
-  padding: 10px;
-  background-color: #f3f4f6;
-  color: #374151;
 }
 
 @keyframes spin {
@@ -168,13 +169,13 @@ body {
   transition: all 0.5s ease;
 }
 
-.dark-mode #theme-toggle i.fa-sun {
+.dark #theme-toggle i.fa-sun {
   transform: rotate(360deg) scale(0);
   opacity: 0;
   position: absolute;
 }
 
-.dark-mode #theme-toggle i.fa-moon {
+.dark #theme-toggle i.fa-moon {
   transform: rotate(0) scale(1);
   opacity: 1;
 }
@@ -235,7 +236,7 @@ body {
   margin-bottom: 20px;
 }
 
-.dark-mode .skills-tab-header {
+.dark .skills-tab-header {
   border-bottom: 2px solid #374151;
 }
 
@@ -366,7 +367,7 @@ body {
   box-shadow: 0 0 20px rgba(236, 72, 153, 0.8);
 }
 
-.dark-mode .timeline-dot {
+.dark .timeline-dot {
   border-color: #1f2937;
 }
 
@@ -529,7 +530,7 @@ body {
   transform: translateY(0);
 }
 
-.dark-mode .timeline-detail-content {
+.dark .timeline-detail-content {
   background-color: #1f2937;
   color: #f3f4f6;
 }
@@ -555,12 +556,12 @@ body {
   transform: rotate(90deg);
 }
 
-.dark-mode .timeline-detail-close {
+.dark .timeline-detail-close {
   background-color: #374151;
   color: #f3f4f6;
 }
 
-.dark-mode .timeline-detail-close:hover {
+.dark .timeline-detail-close:hover {
   background-color: #4b5563;
 }
 
@@ -619,7 +620,7 @@ body {
   color: #4b5563;
 }
 
-.dark-mode .timeline-detail-skill {
+.dark .timeline-detail-skill {
   background-color: #374151;
   color: #d1d5db;
 }
@@ -707,6 +708,16 @@ body {
   margin: auto;
   margin-top: 10px;
   margin-bottom: 5px;
+}
+
+.game-card p,
+.game-card span {
+  color: #6b7280;
+}
+
+.dark .game-card p,
+.dark .game-card span {
+  color: #9ca3af;
 }
 
 /* 联系卡片 */
@@ -850,11 +861,11 @@ body {
 }
 
 /* 夜间模式滚动条 */
-.dark-mode::-webkit-scrollbar-track {
+.dark::-webkit-scrollbar-track {
   background: #374151;
 }
 
-.dark-mode::-webkit-scrollbar-thumb {
+.dark::-webkit-scrollbar-thumb {
   background: linear-gradient(var(--primary-color), var(--accent-color));
 }
 
@@ -875,12 +886,12 @@ body {
   transform: rotate(-360deg) scale(0);
 }
 
-.dark-mode #theme-icon-sun {
+.dark #theme-icon-sun {
   opacity: 0;
   transform: rotate(360deg) scale(0);
 }
 
-.dark-mode #theme-icon-moon {
+.dark #theme-icon-moon {
   opacity: 1;
   transform: rotate(0) scale(1);
   position: static;
@@ -933,22 +944,22 @@ body {
 }
 
 /* 夜间模式播放器样式 */
-.dark-mode .custom-music-player {
+.dark .custom-music-player {
     background-color: #1f2937;
     color: #e5e7eb;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
 }
 
-.dark-mode #progress-container {
+.dark #progress-container {
     background-color: #4b5563;
 }
 
-.dark-mode #progress-handle {
+.dark #progress-handle {
     background-color: #e5e7eb;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
-.dark-mode #progress-handle:hover, .dark-mode #progress-handle:active {
+.dark #progress-handle:hover, .dark #progress-handle:active {
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
 }
 
@@ -1009,15 +1020,15 @@ body {
 }
 
 /* 夜间模式头像样式 */
-.dark-mode .avatar-container {
+.dark .avatar-container {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-.dark-mode .avatar-container:hover {
+.dark .avatar-container:hover {
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
 }
 
-.dark-mode .avatar-container::after {
+.dark .avatar-container::after {
     background: linear-gradient(45deg, rgba(236, 72, 153, 0.3), rgba(139, 92, 246, 0.3));
 }
 
@@ -1088,19 +1099,74 @@ body {
 
 .work-item {
     transition: transform 0.3s ease;
+    background-color: #f9fafb;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .work-item:hover {
     transform: translateY(-2px);
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.work-item h3 {
+    color: #1f2937;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.work-item p {
+    color: #4b5563;
+    margin-bottom: 1rem;
+}
+
+.work-item a {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(to right, #f97316, #ef4444);
+    color: white;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+
+.work-item a:hover {
+    opacity: 0.9;
+}
+
+.work-item a i {
+    margin-right: 0.5rem;
+}
+
+.work-item .text-sm {
+    color: #6b7280;
+    margin-top: 0.5rem;
+}
+
+/* 夜间模式作品展示样式 */
+.dark .work-item {
+    background-color: #1f2937;
+}
+
+.dark .work-item h3 {
+    color: #f3f4f6;
+}
+
+.dark .work-item p {
+    color: #d1d5db;
+}
+
+.dark .work-item .text-sm {
+    color: #9ca3af;
+}
+
+.dark .work-tab-btn {
+    color: #9ca3af;
+}
+
+.dark .work-tab-btn:hover {
+    color: #f3f4f6;
+    background: #374151;
 } 

@@ -7,11 +7,11 @@
     
     // 应用主题
     if (isDarkMode) {
-        document.documentElement.classList.remove('light-mode');
-        document.documentElement.classList.add('dark-mode');
+        document.documentElement.classList.remove('light');
+        document.documentElement.classList.add('dark');
     } else {
-        document.documentElement.classList.remove('dark-mode');
-        document.documentElement.classList.add('light-mode');
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light');
     }
 })();
 
@@ -259,9 +259,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 初始化时间轴交互
     initTimelineInteraction();
-    
-    // 网易云音乐错误处理
-    handleNeteaseMusicErrors();
     
     // 初始化音乐播放器
     initMusicPlayer();
@@ -515,7 +512,7 @@ function initThemeToggle() {
     const moonIcon = document.getElementById('theme-icon-moon');
     
     // 根据当前主题设置初始图标状态
-    if (document.documentElement.classList.contains('dark-mode')) {
+    if (document.documentElement.classList.contains('dark')) {
         sunIcon.style.opacity = '0';
         sunIcon.style.transform = 'rotate(360deg) scale(0)';
         sunIcon.style.position = 'absolute';
@@ -532,9 +529,9 @@ function initThemeToggle() {
     // 点击切换主题
     themeToggle.addEventListener('click', () => {
         // 切换类名
-        if (document.documentElement.classList.contains('dark-mode')) {
-            document.documentElement.classList.remove('dark-mode');
-            document.documentElement.classList.add('light-mode');
+        if (document.documentElement.classList.contains('dark')) {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
             localStorage.setItem('theme', 'light');
             
             // 切换图标 - 月亮变太阳
@@ -547,8 +544,8 @@ function initThemeToggle() {
                 sunIcon.style.transform = 'rotate(0) scale(1)';
             }, 200);
         } else {
-            document.documentElement.classList.remove('light-mode');
-            document.documentElement.classList.add('dark-mode');
+            document.documentElement.classList.remove('light');
+            document.documentElement.classList.add('dark');
             localStorage.setItem('theme', 'dark');
             
             // 切换图标 - 太阳变月亮
@@ -578,60 +575,6 @@ function initSkillBars() {
         // 初始设置为0
         bar.style.width = '0';
     });
-}
-
-// 处理网易云音乐相关错误
-function handleNeteaseMusicErrors() {
-    // 屏蔽控制台网易云音乐相关错误
-    const originalConsoleError = console.error;
-    console.error = function() {
-        const args = Array.from(arguments);
-        const errorMsg = args.join(' ');
-        
-        // 屏蔽网易云音乐相关错误信息
-        if (errorMsg.includes('deviceid.js') || 
-            errorMsg.includes('music-corona') || 
-            errorMsg.includes('music.163.com') || 
-            errorMsg.includes('Permissions policy') ||
-            errorMsg.includes('deviceorientation') ||
-            errorMsg.includes('accelerometer') ||
-            errorMsg.includes('getBrowser') ||
-            errorMsg.includes('encrypted-media')) {
-            return; // 忽略这些错误
-        }
-        
-        // 保留其他错误信息
-        originalConsoleError.apply(console, arguments);
-    };
-    
-    // 为iframe添加错误处理
-    window.addEventListener('error', (event) => {
-        // 检查错误是否来自网易云音乐iframe
-        if (event.filename && (
-            event.filename.includes('music.163.com') || 
-            event.filename.includes('deviceid.js') || 
-            event.filename.includes('getBrowser.js')
-        )) {
-            event.preventDefault(); // 阻止错误冒泡
-            return true;
-        }
-    }, true);
-    
-    // 处理iframe加载
-    const musicIframe = document.querySelector('iframe[src*="music.163.com"]');
-    if (musicIframe) {
-        // 添加加载事件处理
-        musicIframe.addEventListener('load', () => {
-            try {
-                // 尝试设置iframe的sandbox属性 (如果尚未设置)
-                if (!musicIframe.hasAttribute('sandbox')) {
-                    musicIframe.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-forms allow-top-navigation');
-                }
-            } catch (e) {
-                // 忽略可能的错误
-            }
-        });
-    }
 }
 
 // 初始动画函数
@@ -790,7 +733,7 @@ function initMusicPlayer() {
     
     // 检查是否是夜间模式并应用相应的样式
     function updatePlayerTheme() {
-        if (document.documentElement.classList.contains('dark-mode')) {
+        if (document.documentElement.classList.contains('dark')) {
             musicPlayer.classList.add('dark-player');
             musicPlayer.style.backgroundColor = '#1f2937'; // 深色背景
             musicPlayer.querySelectorAll('.text-gray-800').forEach(el => {
