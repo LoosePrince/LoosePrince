@@ -265,6 +265,25 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 初始化音乐播放器
     initMusicPlayer();
+
+    // 作品展示标签页切换
+    const workTabBtns = document.querySelectorAll('.work-tab-btn');
+    const workTabPanes = document.querySelectorAll('.work-tab-pane');
+
+    workTabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // 移除所有按钮的active类
+            workTabBtns.forEach(b => b.classList.remove('active'));
+            // 添加当前按钮的active类
+            btn.classList.add('active');
+
+            // 隐藏所有内容面板
+            workTabPanes.forEach(pane => pane.classList.remove('active'));
+            // 显示对应的内容面板
+            const tabId = btn.getAttribute('data-tab');
+            document.getElementById(`${tabId}-tab`).classList.add('active');
+        });
+    });
 });
 
 // 初始化时间轴交互

@@ -140,6 +140,15 @@ body {
   animation: spin 1s linear infinite;
 }
 
+#loading-screen p {
+  margin-top: 20px;
+  font-size: 16px;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
@@ -689,6 +698,17 @@ body {
   color: var(--text-color);
 }
 
+.game-card span:before {
+  content: '';
+  width: 100px;
+  height: 1px;
+  background-color: #f9c5d1;
+  display: block;
+  margin: auto;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
 /* 联系卡片 */
 .contact-card {
   display: flex;
@@ -1020,5 +1040,67 @@ body {
     to {
         opacity: 1;
         transform: scale(1);
+    }
+}
+
+/* 作品展示样式 */
+.works-tabs {
+    position: relative;
+}
+
+.works-tab-header {
+    display: flex;
+    gap: 1rem;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 0.5rem;
+}
+
+.work-tab-btn {
+    padding: 0.5rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #6b7280;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.work-tab-btn:hover {
+    color: #1f2937;
+    background: #f3f4f6;
+}
+
+.work-tab-btn.active {
+    color: #f97316;
+    background: #fff7ed;
+}
+
+.work-tab-pane {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.work-tab-pane.active {
+    display: block;
+}
+
+.work-item {
+    transition: transform 0.3s ease;
+}
+
+.work-item:hover {
+    transform: translateY(-2px);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 } 

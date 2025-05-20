@@ -19,7 +19,7 @@
                     <img src="http://q1.qlogo.cn/g?b=qq&nk=1377820366&s=640" alt="头像" class="loading-avatar">
                 </div>
                 <div class="loader mb-4"></div>
-                <p class="text-xl text-gray-600 animate__animated animate__pulse animate__infinite">正在准备精彩内容...</p>
+                <p class="text-xl text-gray-600 animate__animated animate__pulse animate__infinite">正在全力加载中...</p>
             </div>
         </div>
 
@@ -240,7 +240,7 @@
                     </div>
                 </div>
                 <div class="mt-4 text-center">
-                    <p>技能是一个一个学的，经验是一点一点积累的</p>
+                    <p class="text-gray-500">技能是一个一个学的，经验是一点一点积累的</p>
                 </div>
             </section>
 
@@ -364,60 +364,68 @@
                 </div>
             </div>
 
-            <!-- 游戏偏好 -->
-            <section id="games" class="bg-white rounded-2xl shadow-lg p-8 mb-12 transform hover:scale-[1.01] transition-all duration-300 relative overflow-hidden reveal-section">
+            <!-- 作品展示 -->
+            <section id="works" class="bg-white rounded-2xl shadow-lg p-8 mb-12 transform hover:scale-[1.01] transition-all duration-300 relative overflow-hidden reveal-section">
                 <div class="absolute top-0 right-0 w-2 h-full bg-gradient-to-b from-purple-500 to-indigo-500"></div>
+                <div class="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-orange-500 to-red-500"></div>
                 <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center">
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-indigo-500">喜欢玩的游戏</span>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-green-500">我的作品</span>
                     <div class="flex-grow h-px bg-gray-200 ml-4"></div>
                 </h2>
                 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="game-card" data-game="原神">
-                        <div class="game-icon">
-                            <!-- <i class="fas fa-gamepad"></i> -->
-                            <img src="https://fastcdn.mihoyo.com/static-resource-v2/2025/03/14/516186272072a512a460c81222aecf1d_2940332403691814685.jpg" alt="">
-                        </div>
-                        <h3>原神</h3>
-                    </div>
-                    <div class="game-card" data-game="崩铁">
-                        <div class="game-icon">
-                            <!-- <i class="fas fa-gamepad"></i> -->
-                            <img src="https://fastcdn.mihoyo.com/static-resource-v2/2025/03/14/fad00b3d31fb11ea3b864bb4625e1ea7_1732118803803772703.jpg" alt="">
-                        </div>
-                        <h3>崩铁</h3>
-                    </div>
-                    <div class="game-card" data-game="绝区零">
-                        <div class="game-icon">
-                            <!-- <i class="fas fa-gamepad"></i> -->
-                            <img src="https://fastcdn.mihoyo.com/static-resource-v2/2025/03/14/09b53fb755412221fedda26863abdfd0_6284584230170612025.png" alt="">
-                        </div>
-                        <h3>绝区零</h3>
-                    </div>
-                    <div class="game-card" data-game="月圆之夜">
-                        <div class="game-icon">
-                            <!-- <i class="fas fa-moon"></i> -->
-                            <img src="https://www.yueyuanzhiye.com/images/v5/logo.png" alt="">
-                        </div>
-                        <h3>月圆之夜</h3>
-                    </div>
-                    <div class="game-card" data-game="MC">
-                        <div class="game-icon">
-                            <!-- <i class="fas fa-cube"></i> -->
-                            <img src="https://www.minecraft.net/content/dam/minecraftnet/franchise/logos/Homepage_Download-Launcher_Creeper-Logo_500x500.png" alt="">
-                        </div>
-                        <h3>MC</h3>
-                    </div>
-                </div>
                 <div class="mt-4 text-center">
-                    <p class="text-gray-500">如果你也对这些游戏感兴趣的话，欢迎来找我玩！</p>
+                    <p class="text-gray-500">作品是技能的体现，也是经验的积累</p>
+                </div>
+
+                <div class="works-tabs">
+                    <div class="works-tab-header mb-6">
+                        <button class="work-tab-btn active" data-tab="ui">UI设计</button>
+                        <button class="work-tab-btn" data-tab="novel">小说作品</button>
+                    </div>
+                    
+                    <div class="works-tab-content">
+                        <!-- UI设计作品标签页 -->
+                        <div class="work-tab-pane active" id="ui-tab">
+                            <div class="work-item bg-gray-50 rounded-lg p-6 mb-6">
+                                <h3 class="text-xl font-semibold text-gray-800 mb-4">UI设计作品集</h3>
+                                <p class="text-gray-600 mb-4">这里收集了我的一些UI设计作品，包括界面设计等。</p>
+                                <a href="https://www.123912.com/s/Jvh8Vv-o5Sf3" target="_blank" class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg hover:opacity-90 transition-opacity">
+                                    <i class="fas fa-download mr-2"></i>
+                                    下载作品集
+                                </a>
+                                <p class="text-sm text-gray-500 mt-2">提取码: 未公开</p>
+                            </div>
+                        </div>
+                        
+                        <!-- 小说作品标签页 -->
+                        <div class="work-tab-pane" id="novel-tab">
+                            <div class="work-item bg-gray-50 rounded-lg p-6">
+                                <h3 class="text-xl font-semibold text-gray-800 mb-4">朝阳公寓的春日手札</h3>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">完本</span>
+                                    <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">免费</span>
+                                    <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">短篇</span>
+                                    <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">22.68万字</span>
+                                </div>
+                                <p class="text-gray-600 mb-4">应届毕业生苏小满揣着三百二十元押金租下朝阳公寓606室的那天，怎么也没想到这栋老楼会成为她人生的转折点。</p>
+                                <div class="flex items-center text-sm text-gray-500 mb-4">
+                                    <i class="far fa-clock mr-2"></i>
+                                    <span>更新时间: 2025-05-06 13:10:00</span>
+                                </div>
+                                <a href="https://www.qidian.com/book/1044207814/" target="_blank" class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg hover:opacity-90 transition-opacity">
+                                    <i class="fas fa-book-open mr-2"></i>
+                                    阅读小说
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
             <!-- 联系方式 -->
             <section id="contact" class="bg-white rounded-2xl shadow-lg p-8 mb-12 transform hover:scale-[1.01] transition-all duration-300 reveal-section">
                 <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center">
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-teal-500">联系方式</span>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500">联系方式</span>
                     <div class="flex-grow h-px bg-gray-200 ml-4"></div>
                 </h2>
                 
@@ -468,6 +476,74 @@
                 </div>
                 <div class="mt-4 text-center">
                     <p class="text-gray-500">如果没有什么事的话，请勿打扰哦~</p>
+                </div>
+            </section>
+
+            <!-- 游戏偏好 -->
+            <section id="games" class="bg-white rounded-2xl shadow-lg p-8 mb-12 transform hover:scale-[1.01] transition-all duration-300 relative overflow-hidden reveal-section">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-indigo-500">喜欢玩的游戏</span>
+                    <div class="flex-grow h-px bg-gray-200 ml-4"></div>
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="game-card" data-game="原神">
+                        <div class="game-icon">
+                            <!-- <i class="fas fa-gamepad"></i> -->
+                            <img src="https://fastcdn.mihoyo.com/static-resource-v2/2025/03/14/516186272072a512a460c81222aecf1d_2940332403691814685.jpg" alt="">
+                        </div>
+                        <h3>原神</h3>
+                        <p class="text-gray-500 text-sm">原神是一款开放世界游戏。</p>
+                        <span class="text-gray-500 text-sm">原神，启动！</span>
+                    </div>
+                    <div class="game-card" data-game="崩坏：星穹铁道">
+                        <div class="game-icon">
+                            <!-- <i class="fas fa-gamepad"></i> -->
+                            <img src="https://fastcdn.mihoyo.com/static-resource-v2/2025/04/08/a765a9750f8b8eac1887de538609a65d_8400545345141782211.png" alt="">
+                        </div>
+                        <h3>崩坏：星穹铁道</h3>
+                        <p class="text-gray-500 text-sm">崩坏：星穹铁道是一款箱庭游戏</p>
+                        <span class="text-gray-500 text-sm">你有权保持沉默，但你所说的每一句话都有可能被改编进 崩坏：星穹铁道 ！</span>
+                    </div>
+                    <div class="game-card" data-game="绝区零">
+                        <div class="game-icon">
+                            <!-- <i class="fas fa-gamepad"></i> -->
+                            <img src="https://fastcdn.mihoyo.com/static-resource-v2/2025/03/14/09b53fb755412221fedda26863abdfd0_6284584230170612025.png" alt="">
+                        </div>
+                        <h3>绝区零</h3>
+                        <p class="text-gray-500 text-sm">绝区零是一款动作游戏</p>
+                        <span class="text-gray-500 text-sm">法厄同啊，法厄同~ 降临在空洞。</span>
+                    </div>
+                    <div class="game-card" data-game="崩坏三">
+                        <div class="game-icon">
+                            <!-- <i class="fas fa-gamepad"></i> -->
+                            <img src="https://fastcdn.mihoyo.com/static-resource-v2/2025/03/14/8a502e85049ca5f539ce3f5e7f03e58e_3747759498074886051.jpg" alt="">
+                        </div>
+                        <h3>崩坏三</h3>
+                        <p class="text-gray-500 text-sm">崩坏三是一款动作游戏</p>
+                        <span class="text-gray-500 text-sm">画笔，臣服于我！</span>
+                    </div>
+                    <div class="game-card" data-game="月圆之夜">
+                        <div class="game-icon">
+                            <!-- <i class="fas fa-moon"></i> -->
+                            <img src="https://www.yueyuanzhiye.com/images/v5/logo.png" alt="">
+                        </div>
+                        <h3>月圆之夜</h3>
+                        <p class="text-gray-500 text-sm">月圆之夜是一款卡牌游戏</p>
+                        <span class="text-gray-500 text-sm">我的回合，欸，还是我的回合~</span>
+                    </div>
+                    <div class="game-card" data-game="MC">
+                        <div class="game-icon">
+                            <!-- <i class="fas fa-cube"></i> -->
+                            <img src="https://www.minecraft.net/content/dam/minecraftnet/franchise/logos/Homepage_Download-Launcher_Creeper-Logo_500x500.png" alt="">
+                        </div>
+                        <h3>MC</h3>
+                        <p class="text-gray-500 text-sm">MC是一款沙盒游戏</p>
+                        <span class="text-gray-500 text-sm">生电玩多了，会丧失人性的。</span>
+                    </div>
+                </div>
+                <div class="mt-4 text-center">
+                    <p class="text-gray-500">如果你也对这些游戏感兴趣的话，欢迎来找我玩！</p>
                 </div>
             </section>
 
