@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小狐狸的魔法棋局（临时移除登录）</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #5a5a5a;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ff6b6b;
+            text-shadow: 0 2px 10px rgba(255, 107, 107, 0.3);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            font-weight: 300;
+        }
+
+        .game-container {
+            display: flex;
+            gap: 30px;
+            max-width: 1200px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .story-panel {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            width: 300px;
+            height: fit-content;
+            border: 2px solid rgba(255, 182, 193, 0.3);
+        }
+
+        .character {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .fox-avatar {
+            background: linear-gradient(45deg, #ff7b7b, #ff9999);
+        }
+
+        .player-avatar {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        }
+
+        .dialogue {
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #ff7b7b;
+            position: relative;
+        }
+
+        .dialogue::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 15px;
+            width: 0;
+            height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-right: 8px solid #f8f9ff;
+        }
+
+        .board-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 182, 193, 0.3);
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(15, 1fr);
+            gap: 2px;
+            background: linear-gradient(45deg, #8B4513, #A0522D);
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .cell {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #DEB887, #F4E4BC);
+            border: 1px solid #CD853F;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.3s ease;
+            border-radius: 3px;
+        }
+
+        .cell:hover {
+            background: linear-gradient(135deg, #E6D3A3, #F5E6C8);
+            transform: scale(1.05);
+        }
+
+        .cell.occupied {
+            cursor: not-allowed;
+        }
+
+        .cell.occupied:hover {
+            transform: none;
+        }
+
+        .piece {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            animation: placepiece 0.3s ease-out;
+        }
+
+        .piece.last-move {
+            animation: lastMove 1.5s ease-in-out;
+        }
+
+        @keyframes placepiece {
+            0% { transform: scale(0) rotate(180deg); opacity: 0; }
+            50% { transform: scale(1.2) rotate(90deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        @keyframes lastMove {
+            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
+            50% { box-shadow: 0 0 20px 10px rgba(255, 215, 0, 0.7); }
+            100% { box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); }
+        }
+
+        .black-piece {
+            background: radial-gradient(circle at 30% 30%, #4a4a4a, #000);
+            border: 2px solid #333;
+        }
+
+        .white-piece {
+            background: radial-gradient(circle at 30% 30%, #fff, #e0e0e0);
+            border: 2px solid #ccc;
+        }
+
+        .warning {
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border: 3px solid #ff4757;
+            border-radius: 6px;
+            animation: pulse 1s infinite;
+            pointer-events: none;
+            box-shadow: 0 0 10px rgba(255, 71, 87, 0.5);
+            background: rgba(255, 71, 87, 0.1);
+        }
+
+        .winning-line {
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border: 3px solid #ffd700;
+            border-radius: 6px;
+            animation: winning-glow 0.8s ease-in-out;
+            pointer-events: none;
+            background: rgba(255, 215, 0, 0.2);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+
+        @keyframes winning-glow {
+            0% { opacity: 0; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.1); }
+            100% { opacity: 0.8; transform: scale(1); }
+        }
+
+        .status-panel {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 182, 193, 0.3);
+        }
+
+        .current-player {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .move-count {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .restart-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .restart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .game-over {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .game-over-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .game-over h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #ff6b6b;
+        }
+
+        .game-over p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .rules-panel {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            padding: 15px;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 182, 193, 0.2);
+        }
+
+        .rules-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .rules-header:hover {
+            background-color: rgba(255, 182, 193, 0.1);
+        }
+
+        .rules-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ff6b6b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .rules-content {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 182, 193, 0.3);
+            display: none;
+        }
+
+        .rules-content.show {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .rules-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .rules-list li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .rules-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #ff6b6b;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-icon.rotate {
+            transform: rotate(180deg);
+        }
+
+        .mode-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .mode-control {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #666;
+            font-size: 0.9rem;
+            position: relative;
+            padding: 5px;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .mode-control:hover {
+            background-color: rgba(255, 182, 193, 0.1);
+        }
+
+        .mode-control .tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            margin-bottom: 5px;
+        }
+
+        .mode-control .tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 5px;
+            border-style: solid;
+            border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+        }
+
+        .mode-control:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #ff6b6b;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        input:disabled + .slider {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            z-index: 1000;
+            display: none;
+            animation: fadeInOut 2s ease-in-out;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .game-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .story-panel {
+                width: 100%;
+                max-width: 400px;
+                order: 1;
+            }
+            
+            .board-container {
+                order: 0;
+            }
+            
+            .cell {
+                width: 25px;
+                height: 25px;
+            }
+            
+            .piece {
+                width: 20px;
+                height: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="title animate__animated animate__fadeInDown">🦊 小狐狸的魔法棋局</h1>
+        <p class="subtitle animate__animated animate__fadeInUp">一个不一样的五子棋游戏</p>
+        <div id="score-display" style="margin-top: 10px; font-size: 1.2rem; color: #ff6b6b; font-weight: bold;">当前分数: 0</div>
+    </div>
+
+    <div class="game-container">
+        <div class="story-panel animate__animated animate__fadeInLeft">
+            <div class="character">
+                <div class="avatar fox-avatar">🦊</div>
+                <div>
+                    <strong>小狐狸阿九</strong>
+                    <div style="font-size: 0.9rem; color: #999;">魔法学徒</div>
+                </div>
+            </div>
+            
+            <div class="dialogue" id="story-text">
+                欢迎来到魔法森林！我是小狐狸阿九，正在学习一种特殊的魔法棋艺。这个棋盘是一个魔法封印阵，任何一方连成五子都会触发魔法爆炸，导致封印阵崩溃。作为挑战者，你需要在不触发魔法爆炸的情况下，用棋子填满整个封印阵。如果成功，你就能获得森林的祝福；如果失败，封印阵就会崩溃，你就要重新开始挑战哦！而我就来扮演你的对手吧。
+            </div>
+
+            <div class="rules-panel">
+                <div class="rules-header" onclick="toggleRules()">
+                    <div class="rules-title">
+                        <span>📖 游戏规则</span>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="rules-content" id="rules-content">
+                    <ul class="rules-list">
+                        <li>这是一个反转的五子棋游戏，目标是填满整个棋盘而不连成五子。</li>
+                        <li>黑子（玩家）先手，白子（AI）后手，轮流在棋盘上落子。</li>
+                        <li>任何一方连成五子（横、竖、斜）都会触发"魔法爆炸"，玩家输掉游戏。</li>
+                        <li>如果棋盘被完全填满且没有五子连线，则玩家获胜。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mode-controls">
+                <label class="mode-control">
+                    <span>智能提示</span>
+                    <label class="switch">
+                        <input type="checkbox" id="toggle-warning">
+                        <span class="slider"></span>
+                    </label>
+                    <div class="tooltip">开启后会在可能形成五子连线的位置显示红色警告</div>
+                </label>
+                <label class="mode-control">
+                    <span>放水模式</span>
+                    <label class="switch">
+                        <input type="checkbox" id="toggle-easy">
+                        <span class="slider"></span>
+                    </label>
+                    <div class="tooltip">开启后AI不会主动连成五子，只会帮助玩家或随机下棋</div>
+                </label>
+            </div>
+
+            <div class="character">
+                <div class="avatar player-avatar">👤</div>
+                <div>
+                    <strong>勇敢的旅行者</strong>
+                    <div style="font-size: 0.9rem; color: #999;">就是你！</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="board-container animate__animated animate__fadeInUp">
+            <div class="game-board" id="game-board"></div>
+            
+            <div class="status-panel">
+                <div class="current-player" id="current-player">轮到你下棋了 (黑子)</div>
+                <div class="move-count" id="move-count">步数: 0/113</div>
+                <div id="time-display" style="font-size: 1rem; color: #666; margin-bottom: 15px;">游戏时间: 0秒</div>
+                <button class="restart-btn" onclick="restartGame()">重新开始魔法之旅</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="game-over hidden" id="game-over">
+        <div class="game-over-content animate__animated animate__bounceIn">
+            <h2 id="game-over-title"></h2>
+            <p id="game-over-message"></p>
+            <button class="restart-btn" onclick="restartGame()">再来一局</button>
+            <button class="restart-btn" style="margin-left: 10px;" onclick="viewScoreDetails()">查看分数构成</button>
+        </div>
+    </div>
+
+    <div class="game-over hidden" id="score-details">
+        <div class="game-over-content animate__animated animate__bounceIn" style="width: 500px; max-height: 80vh; overflow-y: auto;">
+            <h2 style="color: #ff6b6b;">分数构成详情</h2>
+            <div id="score-details-content" style="margin-bottom: 20px; text-align: left; line-height: 1.6;"></div>
+            <button class="restart-btn" onclick="closeScoreDetails()">关闭</button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        class ReverseGomoku {
+            constructor() {
+                this.boardSize = 15;
+                this.board = Array(this.boardSize).fill().map(() => Array(this.boardSize).fill(0));
+                this.currentPlayer = 1; // 1: 黑子(玩家), 2: 白子(AI)
+                this.gameOver = false;
+                this.moveCount = 0;
+                this.warningCells = new Set();
+                this.showWarning = false;
+                this.easyMode = false;
+                this.gameStarted = false;
+                this.playerInitialMovesLeft = 5; // 玩家初始移动次数限制
+                this.aiInitialMovesLeft = 5; // AI初始移动次数限制
+                this.score = 0;
+                this.startTime = null;
+                this.currentTime = 0;
+                this.timerInterval = null;
+                this.playerTriplets = 0;
+                this.playerQuads = 0;
+                this.aiTriplets = 0;
+                this.aiQuads = 0;
+                this.block3x3Count = 0;
+                this.checked3x3 = new Set();
+                this.scoreDetails = [];
+                
+                // 启用模式选择
+                document.getElementById('toggle-warning').disabled = false;
+                document.getElementById('toggle-easy').disabled = false;
+                
+                this.storyTexts = [
+                    "这个位置看起来不错呢！让我帮你制造一个连子的机会~ *狡黠地眨眨眼*",
+                    "哇！你的棋艺真不错，居然能避开这么多陷阱！不过... 让我再试试这一步！",
+                    "诶？你是不是发现我的小计谋了？不过游戏还没结束呢！",
+                    "棋盘快满了！你真的很厉害，居然能避开这么多魔法陷阱！",
+                    "我的魔法还不够强，不会真的爆炸的~ 不过... 嘿嘿，让我再试试这一步！",
+                    "你下得很谨慎呢！不过没关系，我会继续帮你制造机会的~"
+                ];
+                
+                this.initializeBoard();
+                this.updateStatus();
+            }
+
+            initializeBoard() {
+                const boardElement = document.getElementById('game-board');
+                boardElement.innerHTML = '';
+                
+                for (let i = 0; i < this.boardSize; i++) {
+                    for (let j = 0; j < this.boardSize; j++) {
+                        const cell = document.createElement('div');
+                        cell.className = 'cell';
+                        cell.dataset.row = i;
+                        cell.dataset.col = j;
+                        cell.addEventListener('click', () => this.handleCellClick(i, j));
+                        boardElement.appendChild(cell);
+                    }
+                }
+            }
+
+            handleCellClick(row, col) {
+                if (this.gameOver || this.board[row][col] !== 0 || this.currentPlayer !== 1) {
+                    return;
+                }
+
+                // 检查玩家是否在前五次移动中
+                if (this.playerInitialMovesLeft > 0) {
+                    // 检查是否在最外两圈
+                    if (row < 2 || row > this.boardSize - 3 || col < 2 || col > this.boardSize - 3) {
+                        showToast('前五次落子不能在最外两圈哦！');
+                        return;
+                    }
+                }
+
+                this.makeMove(row, col, 1);
+                this.updateStory();
+                
+                if (!this.gameOver) {
+                    setTimeout(() => {
+                        this.aiMove();
+                    }, 1000);
+                }
+            }
+
+            makeMove(row, col, player) {
+                if (!this.gameStarted) {
+                    this.gameStarted = true;
+                    // 禁用模式选择
+                    document.getElementById('toggle-warning').disabled = true;
+                    document.getElementById('toggle-easy').disabled = true;
+                    this.startTime = new Date();
+                    this.startTimer();
+                }
+
+                this.board[row][col] = player;
+                this.moveCount++;
+                
+                // 更新初始移动次数
+                if (player === 1 && this.playerInitialMovesLeft > 0) {
+                    this.playerInitialMovesLeft--;
+                } else if (player === 2 && this.aiInitialMovesLeft > 0) {
+                    this.aiInitialMovesLeft--;
+                }
+
+                const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+                const piece = document.createElement('div');
+                piece.className = `piece ${player === 1 ? 'black-piece' : 'white-piece'} last-move`;
+                cell.appendChild(piece);
+                cell.classList.add('occupied');
+
+                // 移除其他棋子的last-move标记
+                document.querySelectorAll('.piece.last-move').forEach(p => {
+                    if (p !== piece) {
+                        p.classList.remove('last-move');
+                    }
+                });
+
+                // 检查连线奖励
+                this.checkLineBonus(row, col, player);
+                // 检查3x3同色方块奖励
+                this.check3x3Bonus(row, col, player);
+
+                // 检查游戏结束条件
+                const winResult = this.checkWin(row, col, player);
+                if (winResult) {
+                    this.highlightWinningLine(winResult.line);
+                    setTimeout(() => {
+                        this.endGame(false); // AI胜利（有人连成五子）
+                    }, 1500); // 延迟1.5秒显示结束界面
+                    return;
+                }
+
+                if (this.moveCount === this.boardSize * this.boardSize) {
+                    this.endGame(true); // 玩家胜利（棋盘填满且没有五子连线）
+                    return;
+                }
+
+                this.currentPlayer = player === 1 ? 2 : 1;
+                this.updateWarnings();
+                this.updateStatus();
+                this.updateScoreDisplay();
+            }
+            
+            startTimer() {
+                this.timerInterval = setInterval(() => {
+                    this.currentTime = Math.floor((new Date() - this.startTime) / 1000);
+                    document.getElementById('time-display').textContent = `游戏时间: ${this.currentTime}秒`;
+                }, 1000);
+            }
+            
+            stopTimer() {
+                if (this.timerInterval) {
+                    clearInterval(this.timerInterval);
+                    this.timerInterval = null;
+                }
+            }
+            
+            checkLineBonus(row, col, player) {
+                const directions = [
+                    [0, 1], [1, 0], [1, 1], [1, -1]
+                ];
+                let tripletCount = 0;
+                let quadCount = 0;
+
+                for (let [dx, dy] of directions) {
+                    let line = [{row, col}];
+                    
+                    // 向一个方向检查
+                    for (let i = 1; i < 5; i++) {
+                        const newRow = row + dx * i;
+                        const newCol = col + dy * i;
+                        if (newRow >= 0 && newRow < this.boardSize && 
+                            newCol >= 0 && newCol < this.boardSize && 
+                            this.board[newRow][newCol] === player) {
+                            line.push({row: newRow, col: newCol});
+                        } else {
+                            break;
+                        }
+                    }
+                    
+                    // 向相反方向检查
+                    for (let i = 1; i < 5; i++) {
+                        const newRow = row - dx * i;
+                        const newCol = col - dy * i;
+                        if (newRow >= 0 && newRow < this.boardSize && 
+                            newCol >= 0 && newCol < this.boardSize && 
+                            this.board[newRow][newCol] === player) {
+                            line.unshift({row: newRow, col: newCol});
+                        } else {
+                            break;
+                        }
+                    }
+                    
+                    if (line.length === 3) {
+                        tripletCount++;
+                    } else if (line.length === 4) {
+                        quadCount++;
+                    }
+                }
+                
+                if (player === 1) {
+                    this.playerTriplets += tripletCount;
+                    this.playerQuads += quadCount;
+                    if (tripletCount > 0) {
+                        this.score += tripletCount * 10;
+                        showToast(`形成${tripletCount}个三子连线，+${tripletCount * 10}分！`);
+                        this.scoreDetails.push(`玩家形成${tripletCount}个三子连线: +${tripletCount * 10}分`);
+                    }
+                    if (quadCount > 0) {
+                        this.score += quadCount * 30;
+                        showToast(`形成${quadCount}个四子连线，+${quadCount * 30}分！`);
+                        this.scoreDetails.push(`玩家形成${quadCount}个四子连线: +${quadCount * 30}分`);
+                    }
+                } else {
+                    this.aiTriplets += tripletCount;
+                    this.aiQuads += quadCount;
+                    if (tripletCount > 0) {
+                        this.score += tripletCount * 5;
+                        showToast(`AI形成${tripletCount}个三子连线，+${tripletCount * 5}分！`);
+                        this.scoreDetails.push(`AI形成${tripletCount}个三子连线: +${tripletCount * 5}分`);
+                    }
+                    if (quadCount > 0) {
+                        this.score += quadCount * 15;
+                        showToast(`AI形成${quadCount}个四子连线，+${quadCount * 15}分！`);
+                        this.scoreDetails.push(`AI形成${quadCount}个四子连线: +${quadCount * 15}分`);
+                    }
+                }
+            }
+            
+            check3x3Bonus(row, col, player) {
+                // 检查以当前落子为中心的3x3区域
+                for (let i = Math.max(0, row - 1); i <= Math.min(this.boardSize - 3, row); i++) {
+                    for (let j = Math.max(0, col - 1); j <= Math.min(this.boardSize - 3, col); j++) {
+                        const key = `${i},${j}`;
+                        if (this.checked3x3.has(key)) continue;
+                        
+                        if (this.board[i][j] !== 0 && 
+                            this.board[i][j] === this.board[i][j+1] && this.board[i][j] === this.board[i][j+2] &&
+                            this.board[i][j] === this.board[i+1][j] && this.board[i][j] === this.board[i+1][j+1] && this.board[i][j] === this.board[i+1][j+2] &&
+                            this.board[i][j] === this.board[i+2][j] && this.board[i][j] === this.board[i+2][j+1] && this.board[i][j] === this.board[i+2][j+2]) {
+                            this.block3x3Count++;
+                            this.score += 50;
+                            this.checked3x3.add(key);
+                            showToast(`形成一个3×3同色区域，+50分！`);
+                            this.scoreDetails.push(`形成一个3×3同色区域: +50分`);
+                        }
+                    }
+                }
+            }
+            
+            updateScoreDisplay() {
+                document.getElementById('score-display').textContent = `当前分数: ${this.score}`;
+            }
+
+            checkWin(row, col, player) {
+                const directions = [
+                    [0, 1], [1, 0], [1, 1], [1, -1]
+                ];
+
+                for (let [dx, dy] of directions) {
+                    let winningLine = [{row, col}];
+                    
+                    // 向一个方向检查
+                    for (let i = 1; i < 5; i++) {
+                        const newRow = row + dx * i;
+                        const newCol = col + dy * i;
+                        if (newRow >= 0 && newRow < this.boardSize && 
+                            newCol >= 0 && newCol < this.boardSize && 
+                            this.board[newRow][newCol] === player) {
+                            winningLine.push({row: newRow, col: newCol});
+                        } else {
+                            break;
+                        }
+                    }
+                    
+                    // 向相反方向检查
+                    for (let i = 1; i < 5; i++) {
+                        const newRow = row - dx * i;
+                        const newCol = col - dy * i;
+                        if (newRow >= 0 && newRow < this.boardSize && 
+                            newCol >= 0 && newCol < this.boardSize && 
+                            this.board[newRow][newCol] === player) {
+                            winningLine.unshift({row: newRow, col: newCol});
+                        } else {
+                            break;
+                        }
+                    }
+                    
+                    if (winningLine.length >= 5) {
+                        return { line: winningLine.slice(0, 5) }; // 只返回前5个
+                    }
+                }
+                return null;
+            }
+
+            highlightWinningLine(line) {
+                line.forEach(({row, col}) => {
+                    const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+                    const highlight = document.createElement('div');
+                    highlight.className = 'winning-line';
+                    cell.appendChild(highlight);
+                });
+            }
+
+            updateWarnings() {
+                // 只有开启智能提示时才显示
+                if (!this.showWarning) return;
+                // 清除之前的警告
+                this.warningCells.forEach(cellKey => {
+                    const [row, col] = cellKey.split(',').map(Number);
+                    const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+                    const warning = cell.querySelector('.warning');
+                    if (warning) warning.remove();
+                });
+                this.warningCells.clear();
+
+                // 检查新的警告位置
+                for (let i = 0; i < this.boardSize; i++) {
+                    for (let j = 0; j < this.boardSize; j++) {
+                        if (this.board[i][j] === 0) {
+                            if (this.shouldWarn(i, j)) {
+                                const cell = document.querySelector(`[data-row="${i}"][data-col="${j}"]`);
+                                const warning = document.createElement('div');
+                                warning.className = 'warning';
+                                cell.appendChild(warning);
+                                this.warningCells.add(`${i},${j}`);
+                            }
+                        }
+                    }
+                }
+            }
+
+            shouldWarn(row, col) {
+                const directions = [
+                    [0, 1], [1, 0], [1, 1], [1, -1]
+                ];
+
+                for (let [dx, dy] of directions) {
+                    // 检查黑子是否会形成五子连线
+                    if (this.wouldCreateFive(row, col, dx, dy, 1)) {
+                        return true;
+                    }
+                    // 检查白子是否会形成五子连线
+                    if (this.wouldCreateFive(row, col, dx, dy, 2)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            wouldCreateFive(row, col, dx, dy, player) {
+                // 模拟在该位置放置指定颜色的棋子，检查是否会形成五子连线
+                let line = [{row, col}];
+                
+                // 向正方向检查
+                for (let i = 1; i < 5; i++) {
+                    const newRow = row + dx * i;
+                    const newCol = col + dy * i;
+                    if (this.isValidPosition(newRow, newCol) && this.board[newRow][newCol] === player) {
+                        line.push({row: newRow, col: newCol});
+                    } else {
+                        break;
+                    }
+                }
+                
+                // 向负方向检查
+                for (let i = 1; i < 5; i++) {
+                    const newRow = row - dx * i;
+                    const newCol = col - dy * i;
+                    if (this.isValidPosition(newRow, newCol) && this.board[newRow][newCol] === player) {
+                        line.unshift({row: newRow, col: newCol});
+                    } else {
+                        break;
+                    }
+                }
+                
+                // 检查不同的连线情况
+                if (line.length >= 5) {
+                    return true; // 已经有4个同色子，再放1个就是5个
+                }
+                
+                if (line.length === 4) {
+                    // 四子一线，检查另一端是否为空
+                    const firstPos = line[0];
+                    const lastPos = line[line.length - 1];
+                    
+                    const beforeFirst = {
+                        row: firstPos.row - dx,
+                        col: firstPos.col - dy
+                    };
+                    const afterLast = {
+                        row: lastPos.row + dx,
+                        col: lastPos.col + dy
+                    };
+                    
+                    if ((this.isValidPosition(beforeFirst.row, beforeFirst.col) && 
+                         this.board[beforeFirst.row][beforeFirst.col] === 0) ||
+                        (this.isValidPosition(afterLast.row, afterLast.col) && 
+                         this.board[afterLast.row][afterLast.col] === 0)) {
+                        return true;
+                    }
+                }
+                
+                if (line.length === 3) {
+                    // 三子连线，检查两端是否都为空
+                    const firstPos = line[0];
+                    const lastPos = line[line.length - 1];
+                    
+                    const beforeFirst = {
+                        row: firstPos.row - dx,
+                        col: firstPos.col - dy
+                    };
+                    const afterLast = {
+                        row: lastPos.row + dx,
+                        col: lastPos.col + dy
+                    };
+                    
+                    if (this.isValidPosition(beforeFirst.row, beforeFirst.col) && 
+                        this.board[beforeFirst.row][beforeFirst.col] === 0 &&
+                        this.isValidPosition(afterLast.row, afterLast.col) && 
+                        this.board[afterLast.row][afterLast.col] === 0) {
+                        return true;
+                    }
+                }
+                
+                return false;
+            }
+
+            isValidPosition(row, col) {
+                return row >= 0 && row < this.boardSize && col >= 0 && col < this.boardSize;
+            }
+
+            aiMove() {
+                if (this.gameOver) return;
+
+                const bestMove = this.findBestMove();
+                if (bestMove) {
+                    this.makeMove(bestMove.row, bestMove.col, 2);
+                }
+            }
+
+            findBestMove() {
+                let bestMoves = [];
+                // 放水模式下跳过AI主动连五
+                if (!this.easyMode) {
+                    // 1. 首先检查AI自己是否能连成五子
+                    for (let i = 0; i < this.boardSize; i++) {
+                        for (let j = 0; j < this.boardSize; j++) {
+                            if (this.board[i][j] === 0) {
+                                // 检查AI是否在前五次移动中
+                                if (this.aiInitialMovesLeft > 0) {
+                                    if (i < 2 || i > this.boardSize - 3 || j < 2 || j > this.boardSize - 3) {
+                                        continue;
+                                    }
+                                }
+                                this.board[i][j] = 2;
+                                if (this.checkWin(i, j, 2)) {
+                                    this.board[i][j] = 0;
+                                    return {row: i, col: j, priority: 100};
+                                }
+                                this.board[i][j] = 0;
+                            }
+                        }
+                    }
+                }
+
+                // 2. 如果没有直接连成五子的位置，寻找能创造连子机会的位置
+                for (let i = 0; i < this.boardSize; i++) {
+                    for (let j = 0; j < this.boardSize; j++) {
+                        if (this.board[i][j] === 0) {
+                            // 检查AI是否在前五次移动中
+                            if (this.aiInitialMovesLeft > 0) {
+                                if (i < 2 || i > this.boardSize - 3 || j < 2 || j > this.boardSize - 3) {
+                                    continue;
+                                }
+                            }
+                            let score = this.evaluatePosition(i, j);
+                            if (score > 0) {
+                                bestMoves.push({row: i, col: j, priority: score});
+                            }
+                        }
+                    }
+                }
+
+                // 3. 如果还是没有好位置，随机选择
+                if (bestMoves.length === 0) {
+                    for (let i = 0; i < this.boardSize; i++) {
+                        for (let j = 0; j < this.boardSize; j++) {
+                            if (this.board[i][j] === 0) {
+                                // 检查AI是否在前五次移动中
+                                if (this.aiInitialMovesLeft > 0) {
+                                    if (i < 2 || i > this.boardSize - 3 || j < 2 || j > this.boardSize - 3) {
+                                        continue;
+                                    }
+                                }
+                                bestMoves.push({row: i, col: j, priority: 1});
+                            }
+                        }
+                    }
+                }
+
+                if (bestMoves.length === 0) return null;
+
+                // 选择优先级最高的位置
+                bestMoves.sort((a, b) => b.priority - a.priority);
+                const topMoves = bestMoves.filter(move => move.priority === bestMoves[0].priority);
+                return topMoves[Math.floor(Math.random() * topMoves.length)];
+            }
+            
+            evaluateLineScore(row, col, player, directions) {
+                let totalScore = 0;
+                
+                for (let [dx, dy] of directions) {
+                    let line = this.getLine(row, col, dx, dy, player);
+                    let lineScore = 0;
+                    
+                    // 如果是玩家的潜在连线，给予较低分数
+                    if (player === 1) {
+                        if (line.length === 4) {
+                            lineScore = 30; // 降低帮助玩家形成5连的分数
+                        } else if (line.length === 3) {
+                            lineScore = 15;  // 降低帮助玩家形成4连的分数
+                        } else if (line.length === 2) {
+                            lineScore = 5;  // 降低帮助玩家形成3连的分数
+                        } else if (line.length === 1) {
+                            // 检查周围是否有同色棋子
+                            let nearbyCount = this.countNearbyPieces(row, col, player);
+                            lineScore = nearbyCount;
+                        }
+                    } else {
+                        // AI自己的连线评分提高
+                        if (line.length === 4) {
+                            lineScore = 80; // 提高AI四子一线的分数
+                        } else if (line.length === 3) {
+                            lineScore = 40; // 提高AI三子连线的分数
+                        } else if (line.length === 2) {
+                            lineScore = 15;  // 提高AI两子连线的分数
+                        } else if (line.length === 1) {
+                            // 检查周围是否有同色棋子
+                            let nearbyCount = this.countNearbyPieces(row, col, player);
+                            lineScore = nearbyCount * 3;
+                        }
+                    }
+                    
+                    totalScore += lineScore;
+                }
+                
+                return totalScore;
+            }
+
+            getLine(row, col, dx, dy, player) {
+                let line = [{row, col}];
+                
+                // 向正方向检查
+                for (let i = 1; i < 5; i++) {
+                    const newRow = row + dx * i;
+                    const newCol = col + dy * i;
+                    if (this.isValidPosition(newRow, newCol) && this.board[newRow][newCol] === player) {
+                        line.push({row: newRow, col: newCol});
+                    } else {
+                        break;
+                    }
+                }
+                
+                // 向负方向检查
+                for (let i = 1; i < 5; i++) {
+                    const newRow = row - dx * i;
+                    const newCol = col - dy * i;
+                    if (this.isValidPosition(newRow, newCol) && this.board[newRow][newCol] === player) {
+                        line.unshift({row: newRow, col: newCol});
+                    } else {
+                        break;
+                    }
+                }
+                
+                return line;
+            }
+
+            isLineBlocked(row, col, player) {
+                const directions = [
+                    [0, 1], [1, 0], [1, 1], [1, -1]
+                ];
+                
+                for (let [dx, dy] of directions) {
+                    let line = this.getLine(row, col, dx, dy, player);
+                    
+                    if (line.length >= 3) {
+                        // 检查线的两端是否被对方棋子堵住
+                        const firstPos = line[0];
+                        const lastPos = line[line.length - 1];
+                        
+                        const beforeFirst = {
+                            row: firstPos.row - dx,
+                            col: firstPos.col - dy
+                        };
+                        const afterLast = {
+                            row: lastPos.row + dx,
+                            col: lastPos.col + dy
+                        };
+                        
+                        // 对于AI自己的连线，检查是否被玩家堵住
+                        // 对于玩家的连线，我们不检查封堵情况，不希望AI去阻断玩家
+                        if (player === 2) {
+                            const opponent = 1;
+                            let blockedBefore = !this.isValidPosition(beforeFirst.row, beforeFirst.col) || 
+                                            this.board[beforeFirst.row][beforeFirst.col] === opponent;
+                            let blockedAfter = !this.isValidPosition(afterLast.row, afterLast.col) || 
+                                            this.board[afterLast.row][afterLast.col] === opponent;
+                            
+                            if (blockedBefore && blockedAfter) {
+                                return true; // 两端都被堵死
+                            }
+                        }
+                    }
+                }
+                
+                return false;
+            }
+
+            wouldBlockOpponent(row, col, opponent) {
+                // 移除阻断对手的逻辑，让AI不去阻断玩家连线
+                if (opponent === 1) {
+                    return false; // 不阻断玩家
+                }
+                
+                const directions = [
+                    [0, 1], [1, 0], [1, 1], [1, -1]
+                ];
+                
+                for (let [dx, dy] of directions) {
+                    // 检查在此位置放子是否会打断对方的连线
+                    let opponentCount = 0;
+                    
+                    // 检查正方向
+                    for (let i = 1; i <= 2; i++) {
+                        const newRow = row + dx * i;
+                        const newCol = col + dy * i;
+                        if (this.isValidPosition(newRow, newCol) && this.board[newRow][newCol] === opponent) {
+                            opponentCount++;
+                        } else {
+                            break;
+                        }
+                    }
+                    
+                    // 检查负方向
+                    for (let i = 1; i <= 2; i++) {
+                        const newRow = row - dx * i;
+                        const newCol = col - dy * i;
+                        if (this.isValidPosition(newRow, newCol) && this.board[newRow][newCol] === opponent) {
+                            opponentCount++;
+                        } else {
+                            break;
+                        }
+                    }
+                    
+                    if (opponentCount >= 2) {
+                        return true; // 会阻断对方连线
+                    }
+                }
+                
+                return false;
+            }
+
+            evaluatePosition(row, col) {
+                let score = 0;
+                const directions = [
+                    [0, 1], [1, 0], [1, 1], [1, -1]
+                ];
+
+                // 评估白子自己的连线潜力
+                let whiteScore = this.evaluateLineScore(row, col, 2, directions);
+                
+                // 评估帮助黑子连线的潜力
+                let blackScore = this.evaluateLineScore(row, col, 1, directions);
+                
+                // 检查白子连线是否被堵死
+                let whiteBlocked = this.isLineBlocked(row, col, 2);
+                
+                // 计算最终分数
+                if (whiteBlocked) {
+                    whiteScore *= 0.3; // 被堵死的连线大大降低优先级
+                }
+                
+                // 检查是否会阻断玩家连线 - 如果会阻断，大幅降低得分
+                if (this.wouldBlockOpponent(row, col, 1)) {
+                    score = 0; // 不鼓励阻断玩家的连线
+                } else {
+                    // 调整权重：提高AI自己连线的分数，降低帮助玩家的分数
+                    score = whiteScore * 3 + blackScore * 1;
+                }
+                
+                return Math.max(score, 1);
+            }
+
+            countNearbyPieces(row, col, player) {
+                let count = 0;
+                for (let i = -1; i <= 1; i++) {
+                    for (let j = -1; j <= 1; j++) {
+                        if (i === 0 && j === 0) continue;
+                        const newRow = row + i;
+                        const newCol = col + j;
+                        if (this.isValidPosition(newRow, newCol) && this.board[newRow][newCol] === player) {
+                            count++;
+                        }
+                    }
+                }
+                return count;
+            }
+
+            updateStory() {
+                const storyElement = document.getElementById('story-text');
+                const randomIndex = Math.floor(Math.random() * this.storyTexts.length);
+                storyElement.textContent = this.storyTexts[randomIndex];
+                storyElement.classList.add('animate__animated', 'animate__fadeIn');
+                
+                setTimeout(() => {
+                    storyElement.classList.remove('animate__animated', 'animate__fadeIn');
+                }, 1000);
+            }
+
+            updateStatus() {
+                const currentPlayerElement = document.getElementById('current-player');
+                const moveCountElement = document.getElementById('move-count');
+                
+                if (this.currentPlayer === 1) {
+                    let statusText = '轮到你下棋了 (黑子)';
+                    if (this.playerInitialMovesLeft > 0) {
+                        statusText += ` (前${this.playerInitialMovesLeft}步不能在最外两圈)`;
+                    }
+                    currentPlayerElement.textContent = statusText;
+                    currentPlayerElement.style.color = '#333';
+                } else {
+                    let statusText = '小狐狸正在思考... (白子)';
+                    if (this.aiInitialMovesLeft > 0) {
+                        statusText += ` (前${this.aiInitialMovesLeft}步不能在最外两圈)`;
+                    }
+                    currentPlayerElement.textContent = statusText;
+                    currentPlayerElement.style.color = '#ff6b6b';
+                }
+                
+                moveCountElement.textContent = `步数: ${this.moveCount}/${Math.ceil(this.boardSize * this.boardSize / 2)}`;
+            }
+
+            endGame(playerWin) {
+                this.gameOver = true;
+                this.stopTimer();
+                let finalScore = this.score;
+                let timeBonus = 0;
+                if (playerWin) {
+                    finalScore += 1000;
+                    showToast('恭喜胜利，+1000分！');
+                    this.scoreDetails.push(`玩家胜利（填满棋盘且无五连子）: +1000分`);
+                    // 时间奖励，基准时间为300秒
+                    timeBonus = 300 - this.currentTime;
+                    if (timeBonus > 0) {
+                        finalScore += timeBonus;
+                        showToast(`时间奖励，+${timeBonus}分！`);
+                        this.scoreDetails.push(`时间奖励（基准时间300秒，每快1秒+1分）: +${timeBonus}分`);
+                    } else {
+                        finalScore += timeBonus;
+                        showToast(`时间惩罚，${timeBonus}分！`);
+                        this.scoreDetails.push(`时间惩罚（基准时间300秒，每慢1秒-1分）: ${timeBonus}分`);
+                    }
+                } else {
+                    // 失败时的危险惩罚
+                    const penalty = (this.playerTriplets * 5) + (this.playerQuads * 15);
+                    finalScore -= penalty;
+                    showToast(`失败惩罚，-${penalty}分！`);
+                    this.scoreDetails.push(`失败惩罚（玩家三子-5分/次，四子-15分/次）: -${penalty}分`);
+                }
+                
+                // 智能提示和放水模式扣分
+                if (this.showWarning) {
+                    finalScore -= 200;
+                    showToast('智能提示模式启用，-200分！');
+                    this.scoreDetails.push(`智能提示模式启用: -200分`);
+                }
+                if (this.easyMode) {
+                    finalScore -= 400;
+                    showToast('放水模式启用，-400分！');
+                    this.scoreDetails.push(`放水模式启用: -400分`);
+                }
+                
+                const gameOverElement = document.getElementById('game-over');
+                const titleElement = document.getElementById('game-over-title');
+                const messageElement = document.getElementById('game-over-message');
+                
+                if (playerWin) {
+                    titleElement.textContent = '🎉 恭喜你获得森林的祝福！';
+                    titleElement.style.color = '#4ecdc4';
+                    messageElement.textContent = `太厉害了！你成功在不触发魔法爆炸的情况下填满了整个封印阵！最终得分：${finalScore}分。小狐狸阿九对你的智慧感到敬佩，森林的精灵们也会为你送上祝福！`;
+                } else {
+                    titleElement.textContent = '💥 封印阵崩溃了！';
+                    titleElement.style.color = '#ff6b6b';
+                    messageElement.textContent = `哎呀！五子连线触发了魔法爆炸，封印阵崩溃了！最终得分：${finalScore}分。不过别灰心，每一次失败都是学习的机会。小狐狸阿九会继续在这里等你，随时可以重新开始挑战！`;
+                }
+                
+                gameOverElement.classList.remove('hidden');
+                this.updateScoreDisplay();
+            }
+        }
+
+        let game = new ReverseGomoku();
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 2000);
+        }
+
+        // 智能提示开关
+        document.getElementById('toggle-warning').onchange = function() {
+            if (game.gameStarted) {
+                this.checked = !this.checked;
+                showToast('游戏开始后无法切换模式');
+                return;
+            }
+            game.showWarning = this.checked;
+            game.updateWarnings();
+        };
+
+        // 放水模式开关
+        document.getElementById('toggle-easy').onchange = function() {
+            if (game.gameStarted) {
+                this.checked = !this.checked;
+                showToast('游戏开始后无法切换模式');
+                return;
+            }
+            game.easyMode = this.checked;
+        };
+
+        function restartGame() {
+            document.getElementById('game-over').classList.add('hidden');
+            document.getElementById('score-details').classList.add('hidden');
+            game = new ReverseGomoku();
+        }
+
+        function toggleRules() {
+            const content = document.getElementById('rules-content');
+            const icon = document.querySelector('.toggle-icon');
+            content.classList.toggle('show');
+            icon.classList.toggle('rotate');
+        }
+
+        function viewScoreDetails() {
+            const detailsElement = document.getElementById('score-details');
+            const contentElement = document.getElementById('score-details-content');
+            let detailsHtml = '<ul style="list-style-type:disc; margin-left: 20px;">';
+            if (game.scoreDetails.length === 0) {
+                detailsHtml += '<li>暂无详细分数记录</li>';
+            } else {
+                for (let detail of game.scoreDetails) {
+                    detailsHtml += `<li>${detail}</li>`;
+                }
+            }
+            detailsHtml += '</ul>';
+            contentElement.innerHTML = detailsHtml;
+            detailsElement.classList.remove('hidden');
+        }
+        
+        function closeScoreDetails() {
+            document.getElementById('score-details').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
