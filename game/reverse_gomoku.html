@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>小狐狸的魔法棋局（临时移除登录）</title>
+    <title>小狐狸的魔法棋局</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
@@ -584,20 +584,28 @@
 
             <div class="mode-controls">
                 <label class="mode-control">
-                    <span>智能提示</span>
+                    <span>智能提示（你要输咯~）</span>
                     <label class="switch">
                         <input type="checkbox" id="toggle-warning">
                         <span class="slider"></span>
                     </label>
-                    <div class="tooltip">开启后会在可能形成五子连线的位置显示红色警告</div>
+                    <div class="tooltip">开启后会在可能形成五子连线的位置显示红色警告（-200分）</div>
                 </label>
                 <label class="mode-control">
-                    <span>放水模式</span>
+                    <span>放水模式（你这也不行啊）</span>
                     <label class="switch">
                         <input type="checkbox" id="toggle-easy">
                         <span class="slider"></span>
                     </label>
-                    <div class="tooltip">开启后AI不会主动连成五子，只会帮助玩家或随机下棋</div>
+                    <div class="tooltip">开启后AI不会主动连成五子，只会帮助玩家或随机下棋（-400分）</div>
+                </label>
+                <label class="mode-control">
+                    <span>6子模式（让你亿子）</span>
+                    <label class="switch">
+                        <input type="checkbox" id="toggle-six">
+                        <span class="slider"></span>
+                    </label>
+                    <div class="tooltip">开启后需要连成6子才会触发魔法爆炸，降低游戏难度（-600分）</div>
                 </label>
             </div>
 
@@ -652,6 +660,7 @@
                 this.warningCells = new Set();
                 this.showWarning = false;
                 this.easyMode = false;
+                this.sixMode = false;
                 this.gameStarted = false;
                 this.playerInitialMovesLeft = 5; // 玩家初始移动次数限制
                 this.aiInitialMovesLeft = 5; // AI初始移动次数限制
@@ -670,6 +679,7 @@
                 // 启用模式选择
                 document.getElementById('toggle-warning').disabled = false;
                 document.getElementById('toggle-easy').disabled = false;
+                document.getElementById('toggle-six').disabled = false;
                 
                 this.storyTexts = [
                     "这个位置看起来不错呢！让我帮你制造一个连子的机会~ *狡黠地眨眨眼*",
@@ -730,6 +740,7 @@
                     // 禁用模式选择
                     document.getElementById('toggle-warning').disabled = true;
                     document.getElementById('toggle-easy').disabled = true;
+                    document.getElementById('toggle-six').disabled = true;
                     this.startTime = new Date();
                     this.startTimer();
                 }
@@ -898,12 +909,15 @@
                 const directions = [
                     [0, 1], [1, 0], [1, 1], [1, -1]
                 ];
+                
+                const winLength = this.sixMode ? 6 : 5; // 6子模式需要6子连线
+                const maxCheck = this.sixMode ? 6 : 5;
 
                 for (let [dx, dy] of directions) {
                     let winningLine = [{row, col}];
                     
                     // 向一个方向检查
-                    for (let i = 1; i < 5; i++) {
+                    for (let i = 1; i < maxCheck; i++) {
                         const newRow = row + dx * i;
                         const newCol = col + dy * i;
                         if (newRow >= 0 && newRow < this.boardSize && 
@@ -916,7 +930,7 @@
                     }
                     
                     // 向相反方向检查
-                    for (let i = 1; i < 5; i++) {
+                    for (let i = 1; i < maxCheck; i++) {
                         const newRow = row - dx * i;
                         const newCol = col - dy * i;
                         if (newRow >= 0 && newRow < this.boardSize && 
@@ -928,8 +942,8 @@
                         }
                     }
                     
-                    if (winningLine.length >= 5) {
-                        return { line: winningLine.slice(0, 5) }; // 只返回前5个
+                    if (winningLine.length >= winLength) {
+                        return { line: winningLine.slice(0, winLength) }; // 返回连线长度对应的棋子
                     }
                 }
                 return null;
@@ -978,24 +992,26 @@
                 ];
 
                 for (let [dx, dy] of directions) {
-                    // 检查黑子是否会形成五子连线
-                    if (this.wouldCreateFive(row, col, dx, dy, 1)) {
+                    // 检查黑子是否会形成连线
+                    if (this.wouldCreateWinningLine(row, col, dx, dy, 1)) {
                         return true;
                     }
-                    // 检查白子是否会形成五子连线
-                    if (this.wouldCreateFive(row, col, dx, dy, 2)) {
+                    // 检查白子是否会形成连线
+                    if (this.wouldCreateWinningLine(row, col, dx, dy, 2)) {
                         return true;
                     }
                 }
                 return false;
             }
 
-            wouldCreateFive(row, col, dx, dy, player) {
-                // 模拟在该位置放置指定颜色的棋子，检查是否会形成五子连线
+            wouldCreateWinningLine(row, col, dx, dy, player) {
+                // 模拟在该位置放置指定颜色的棋子，检查是否会形成获胜连线
+                const winLength = this.sixMode ? 6 : 5;
+                const maxCheck = this.sixMode ? 6 : 5;
                 let line = [{row, col}];
                 
                 // 向正方向检查
-                for (let i = 1; i < 5; i++) {
+                for (let i = 1; i < maxCheck; i++) {
                     const newRow = row + dx * i;
                     const newCol = col + dy * i;
                     if (this.isValidPosition(newRow, newCol) && this.board[newRow][newCol] === player) {
@@ -1006,7 +1022,7 @@
                 }
                 
                 // 向负方向检查
-                for (let i = 1; i < 5; i++) {
+                for (let i = 1; i < maxCheck; i++) {
                     const newRow = row - dx * i;
                     const newCol = col - dy * i;
                     if (this.isValidPosition(newRow, newCol) && this.board[newRow][newCol] === player) {
@@ -1017,12 +1033,12 @@
                 }
                 
                 // 检查不同的连线情况
-                if (line.length >= 5) {
-                    return true; // 已经有4个同色子，再放1个就是5个
+                if (line.length >= winLength) {
+                    return true; // 已经有足够的同色子，再放1个就会获胜
                 }
                 
-                if (line.length === 4) {
-                    // 四子一线，检查另一端是否为空
+                if (line.length === winLength - 1) {
+                    // 差一子获胜，检查另一端是否为空
                     const firstPos = line[0];
                     const lastPos = line[line.length - 1];
                     
@@ -1043,8 +1059,8 @@
                     }
                 }
                 
-                if (line.length === 3) {
-                    // 三子连线，检查两端是否都为空
+                if (line.length === winLength - 2) {
+                    // 差两子获胜，检查两端是否都为空
                     const firstPos = line[0];
                     const lastPos = line[line.length - 1];
                     
@@ -1391,7 +1407,8 @@
                 if (playerWin) {
                     finalScore += 1000;
                     showToast('恭喜胜利，+1000分！');
-                    this.scoreDetails.push(`玩家胜利（填满棋盘且无五连子）: +1000分`);
+                    const winLength = this.sixMode ? '六' : '五';
+                    this.scoreDetails.push(`玩家胜利（填满棋盘且无${winLength}连子）: +1000分`);
                     // 时间奖励，基准时间为300秒
                     timeBonus = 300 - this.currentTime;
                     if (timeBonus > 0) {
@@ -1411,7 +1428,7 @@
                     this.scoreDetails.push(`失败惩罚（玩家三子-5分/次，四子-15分/次）: -${penalty}分`);
                 }
                 
-                // 智能提示和放水模式扣分
+                // 智能提示、放水模式和6子模式扣分
                 if (this.showWarning) {
                     finalScore -= 200;
                     showToast('智能提示模式启用，-200分！');
@@ -1421,6 +1438,11 @@
                     finalScore -= 400;
                     showToast('放水模式启用，-400分！');
                     this.scoreDetails.push(`放水模式启用: -400分`);
+                }
+                if (this.sixMode) {
+                    finalScore -= 600;
+                    showToast('6子模式启用，-600分！');
+                    this.scoreDetails.push(`6子模式启用: -600分`);
                 }
                 
                 const gameOverElement = document.getElementById('game-over');
@@ -1434,7 +1456,8 @@
                 } else {
                     titleElement.textContent = '💥 封印阵崩溃了！';
                     titleElement.style.color = '#ff6b6b';
-                    messageElement.textContent = `哎呀！五子连线触发了魔法爆炸，封印阵崩溃了！最终得分：${finalScore}分。不过别灰心，每一次失败都是学习的机会。小狐狸阿九会继续在这里等你，随时可以重新开始挑战！`;
+                    const winLength = this.sixMode ? '六' : '五';
+                    messageElement.textContent = `哎呀！${winLength}子连线触发了魔法爆炸，封印阵崩溃了！最终得分：${finalScore}分。不过别灰心，每一次失败都是学习的机会。小狐狸阿九会继续在这里等你，随时可以重新开始挑战！`;
                 }
                 
                 gameOverElement.classList.remove('hidden');
@@ -1472,6 +1495,16 @@
                 return;
             }
             game.easyMode = this.checked;
+        };
+
+        // 6子模式开关
+        document.getElementById('toggle-six').onchange = function() {
+            if (game.gameStarted) {
+                this.checked = !this.checked;
+                showToast('游戏开始后无法切换模式');
+                return;
+            }
+            game.sixMode = this.checked;
         };
 
         function restartGame() {
