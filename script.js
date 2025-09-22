@@ -19,22 +19,8 @@
 const timelineData = [
     {
         year: "2020",
-        title: "自学编程",
-        description: "开始学习前端技术，从HTML、CSS开始。通过自学我逐渐培养了编程思维。",
-        skills: ["HTML", "CSS", "JavaScript", "前端基础"],
-        images: [
-            "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
-        ],
-        achievements: [
-            "完成第一个个人网站项目",
-            "掌握前端基础技术栈"
-        ]
-    },
-    {
-        year: "2021",
-        title: "开始接触设计",
-        description: "初次尝试UI设计，开始学习设计原则和用户界面交互。通过与团队合作，我开始了解设计对用户体验的重要性，并开始培养自己的设计思维。",
+        title: "UI设计专业",
+        description: "进入某职业学校学习UI设计（校企合作），开始接触设计原则和用户界面交互。通过专业学习，我开始了解设计对用户体验的重要性，并培养自己的设计思维。",
         skills: ["UI设计", "Photoshop", "创意思维"],
         images: [
             "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
@@ -47,74 +33,75 @@ const timelineData = [
         ]
     },
     {
-        year: "2023",
-        title: "构建个人网站",
-        description: "深入学习前端技术，构建个人网站。这个项目让我有机会将之前学到的所有技能整合在一起，包括前端开发、UI设计和用户体验优化。",
-        skills: ["前端开发", "UI设计", "响应式设计", "用户体验"],
-        images: [
-            "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            "https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
-        ],
-        achievements: [
-            "完成个人作品集网站",
-            "实现响应式设计",
-            "优化用户体验和交互效果"
-        ]
-    },
-    {
-        year: "2023",
-        title: "实习",
-        description: "在本地软件公司实习，积累实战经验。这次实习让我有机会接触真实的商业项目，学习项目流程和团队协作。在专业开发者的指导下，我的技术能力得到显著提升。",
-        skills: ["项目开发", "团队协作", "问题解决", "代码优化"],
+        year: "2022",
+        title: "运营支持实习",
+        description: "在某科技公司进行运营支持实习，积累新媒体运营工作经验。这次实习让我有机会接触真实的商业项目，学习项目流程和团队协作。",
+        skills: ["新媒体运营", "项目策划", "客户服务", "团队协作"],
         images: [
             "https://images.unsplash.com/photo-1522542550221-31fd19575a2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             "https://images.unsplash.com/photo-1558346547-4439467bd1d5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
         ],
         achievements: [
-            "参与商业项目",
-            "学习项目流程",
+            "参与商业项目运营",
+            "学习项目流程管理",
             "提升团队协作能力"
         ]
     },
     {
         year: "2023",
-        title: "大学",
-        description: "进入大学，开始新的生活。在大学里，我不仅继续深化专业知识，还积极参与各种社团活动和项目实践，拓展视野，培养综合能力。",
-        skills: ["学习能力", "时间管理", "团队合作", "沟通表达"],
+        title: "UI设计毕业",
+        description: "完成中专学业，UI设计作品参展。这个阶段让我有机会展示自己的设计能力，并通过作品参展获得了更多认可。",
+        skills: ["UI设计", "作品展示", "设计思维", "创意表达"],
         images: [
-            "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+            "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            "https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
         ],
         achievements: [
-            "适应大学生活",
+            "UI设计作品参展",
+            "完成中专学业",
+            "获得设计认可"
+        ]
+    },
+    {
+        year: "2023",
+        title: "Web前端开发",
+        description: "进入某职业学院，学习Web前端开发。在大学里，我不仅继续深化专业知识，还积极参与各种社团活动和项目实践，拓展视野，培养综合能力。",
+        skills: ["前端开发", "学习能力", "时间管理", "团队合作"],
+        images: [
+            "https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+        ],
+        achievements: [
+            "适应新的学习环境",
             "参与校园活动",
             "建立新的社交圈"
         ]
     },
     {
         year: "2024",
-        title: "参与开源项目",
-        description: "为开源项目贡献代码与设计。让我了解了协作开发的流程和规范，提高了代码质量和版本控制技能，也让我开阔了视野。",
-        skills: ["Git", "协作开发", "文档编写", "问题追踪"],
+        title: "前端竞赛获奖",
+        description: "多次获得前端开发竞赛奖项。这些竞赛让我有机会展示自己的技术能力，也让我了解了协作开发的流程和规范，提高了代码质量和版本控制技能。",
+        skills: ["前端开发", "竞赛经验", "技术展示", "团队协作"],
         images: [
             "https://images.unsplash.com/photo-1522542550221-31fd19575a2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             "https://images.unsplash.com/photo-1558346547-4439467bd1d5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
         ],
         achievements: [
-            "向多个开源项目提交代码",
-            "学习团队协作的开发流程"
+            "多次获得前端开发竞赛奖项",
+            "提升技术展示能力"
         ]
     },
     {
         year: "2024",
-        title: "全栈开发",
-        description: "开始全栈开发学习，打造个人作品集网站。我学习了后端技术，结合前端知识，构建了完整的Web应用。这个过程中，我掌握了数据库设计、API开发和服务器部署等技能。",
-        skills: ["Node.js", "MongoDB", "React", "响应式设计", "API开发"],
+        title: "全栈项目开发",
+        description: "开发游戏服务器官网、博客网站、聊天网站等项目。我学习了后端技术，结合前端知识，构建了完整的Web应用。这个过程中，我掌握了数据库设计、API开发和服务器部署等技能。",
+        skills: ["Node.js", "Vue", "PHP", "MySQL", "PostgreSQL", "全栈开发"],
         images: [
             "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             "https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
         ],
         achievements: [
-            "开发并部署个人作品集网站",
+            "开发多个全栈项目",
+            "掌握多种技术栈",
             "学习云服务部署和维护"
         ]
     },

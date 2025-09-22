@@ -1147,7 +1147,8 @@ body {
 
 /* 夜间模式作品展示样式 */
 .dark .work-item {
-    background-color: #1f2937;
+    background-color: #374151;
+    border: 1px solid #4b5563;
 }
 
 .dark .work-item h3 {
@@ -1164,9 +1165,42 @@ body {
 
 .dark .work-tab-btn {
     color: #9ca3af;
+    background: transparent;
 }
 
 .dark .work-tab-btn:hover {
     color: #f3f4f6;
-    background: #374151;
+    background: #4b5563;
+}
+
+.dark .work-tab-btn.active {
+    color: #f97316;
+    background: #451a03;
+}
+
+/* 修复作品展示区域在深色模式下的背景色 */
+.dark #works {
+    background-color: #1f2937;
+}
+
+.dark #works .bg-gray-50 {
+    background-color: #374151 !important;
+}
+
+/* 修复作品展示标签页头部样式 */
+.dark .works-tab-header {
+    border-bottom: 1px solid #4b5563;
+}
+
+/* 确保作品展示区域的文字颜色正确 */
+.dark #works .text-gray-500 {
+    color: #9ca3af !important;
+}
+
+.dark #works .text-gray-600 {
+    color: #d1d5db !important;
+}
+
+.dark #works .text-gray-800 {
+    color: #f3f4f6 !important;
 } 
