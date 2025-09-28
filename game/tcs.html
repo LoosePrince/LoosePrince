@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<title>贪吃蛇大冒险</title>
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+		<!-- 在线引入React、ReactDOM、Babel -->
+		<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+		<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+		<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+		<!-- 在线引入Tailwind CSS -->
+		<script src="https://cdn.tailwindcss.com"></script>
+		<!-- 在线引入Font Awesome图标库 -->
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+		<style>
+		    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+		    
+		    * {
+		        margin: 0;
+		        padding: 0;
+		        box-sizing: border-box;
+		    }
+
+		    body {
+		        font-family: 'Noto Sans SC', sans-serif;
+		        background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+		        min-height: 100vh;
+		        height: 100vh;
+		        display: flex;
+		        flex-direction: column;
+		        align-items: center;
+		        padding: 10px;
+		        color: #5a5a5a;
+		    }
+		</style>
+		<script>
+		    // 配置Tailwind自定义颜色，用于游戏元素的样式
+		    tailwind.config = {
+		        theme: {
+		            extend: {
+		                colors: {
+		                    snake: {
+		                        body: '#10B981',    // 蛇身体颜色(绿色)
+		                        head: '#059669',    // 蛇头颜色(深绿色)
+		                        food: '#EF4444',    // 普通食物颜色(红色)
+		                        grid: '#E5E7EB',    // 网格线颜色(浅灰色)
+		                        background: '#F9FAFB' // 游戏背景色
+		                    }
+		                }
+		            }
+		        }
+		    }
+
+		</script>
+		<script>		    
+		    // 完全阻止手机浏览器下滑刷新和滚动
+		    (function() {
+		        // 完全阻止所有触摸移动事件
+		        document.addEventListener('touchmove', function(e) {
+		            e.preventDefault();
+		        }, { passive: false });
+		        
+		        // 阻止触摸开始事件（防止滚动）
+		        document.addEventListener('touchstart', function(e) {
+		            // 允许按钮、游戏区域和游戏控制的触摸
+		            if (e.target.tagName === 'BUTTON' || e.target.closest('button') || 
+		                e.target.closest('.game-grid') || e.target.closest('.game-controls')) {
+		                return;
+		            }
+		            // 其他区域阻止默认行为
+		            e.preventDefault();
+		        }, { passive: false });
+		        
+		        // 阻止触摸结束事件
+		        document.addEventListener('touchend', function(e) {
+		            // 允许按钮、游戏区域和游戏控制的触摸
+		            if (e.target.tagName === 'BUTTON' || e.target.closest('button') || 
+		                e.target.closest('.game-grid') || e.target.closest('.game-controls')) {
+		                return;
+		            }
+		            e.preventDefault();
+		        }, { passive: false });
+		        
+		        // 阻止双击缩放
+		        let lastTouchEnd = 0;
+		        document.addEventListener('touchend', function(e) {
+		            const now = (new Date()).getTime();
+		            if (now - lastTouchEnd <= 300) {
+		                // 允许按钮的双击
+		                if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+		                    return;
+		                }
+		                e.preventDefault();
+		            }
+		            lastTouchEnd = now;
+		        }, false);
+		        
+		        // 阻止长按菜单
+		        document.addEventListener('contextmenu', function(e) {
+		            e.preventDefault();
+		        });
+		        
+		        // 阻止鼠标滚轮事件
+		        document.addEventListener('wheel', function(e) {
+		            e.preventDefault();
+		        }, { passive: false });
+		        
+		        // 阻止键盘滚动（但保留游戏控制）
+		        document.addEventListener('keydown', function(e) {
+		            // 阻止滚动相关的按键，但保留游戏控制按键
+		            if ([33, 34, 35, 36].indexOf(e.keyCode) > -1) {
+		                // 33: Page Up, 34: Page Down, 35: End, 36: Home
+		                e.preventDefault();
+		            }
+		            // 注意：方向键(37-40)、空格键(32)和WASD键保留用于游戏控制
+		        });
+		        
+		    })();
+		</script>
+		<style type="text/tailwindcss">
+		    @layer utilities {
+		        /* 游戏容器样式 */
+		        .game-container {
+		            background: rgba(255, 255, 255, 0.95);
+		            border-radius: 20px;
+		            padding: 15px;
+		            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+		            backdrop-filter: blur(10px);
+		            border: 2px solid rgba(255, 182, 193, 0.3);
+		            max-width: 600px;
+		            width: 100%;
+		            max-height: calc(100vh - 40px);
+		            overflow: hidden;
+		            display: flex;
+		            flex-direction: column;
+		        }
+		        
+		        /* 游戏网格容器样式 */
+		        .game-grid {
+		            @apply relative w-full
+					mx-auto aspect-square bg-snake-background 
+					border-4 border-gray-700 rounded-lg overflow-hidden;
+		        }
+		        /* 网格单元格样式 */
+		        .grid-cell {
+		            @apply absolute border border-snake-grid/30;
+		        }
+		        /* 蛇身体部分样式 */
+		        .snake-segment {
+		            @apply absolute bg-snake-body rounded-sm transition-all duration-100;
+		        }
+		        /* 蛇头样式 */
+		        .snake-head {
+		            @apply bg-snake-head;
+		        }
+		        /* 普通食物样式 */
+		        .food {
+		            @apply absolute bg-snake-food rounded-full transition-all duration-200 animate-pulse;
+		        }
+		        /* 奖励食物样式 */
+		        .bonus-food {
+		            @apply absolute bg-purple-600 rounded-full transition-all duration-200 animate-pulse;
+		        }
+		        
+		        /* 标题样式 */
+		        .game-title {
+		            font-size: 1.8rem;
+		            font-weight: 700;
+		            color: #ff6b6b;
+		            text-shadow: 0 2px 10px rgba(255, 107, 107, 0.3);
+		            margin-bottom: 5px;
+		            text-align: center;
+		        }
+		        
+		        .game-subtitle {
+		            font-size: 0.9rem;
+		            color: #666;
+		            font-weight: 300;
+		            text-align: center;
+		            margin-bottom: 10px;
+		        }
+		        
+		        /* 状态面板样式 */
+		        .status-panel {
+		            background: rgba(255, 255, 255, 0.9);
+		            border-radius: 15px;
+		            padding: 10px;
+		            margin: 10px 0;
+		            text-align: center;
+		            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+		            backdrop-filter: blur(10px);
+		            border: 2px solid rgba(255, 182, 193, 0.3);
+		        }
+		        
+		        /* 按钮样式 */
+		        .game-btn {
+		            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+		            color: white;
+		            border: none;
+		            padding: 8px 16px;
+		            border-radius: 20px;
+		            font-size: 0.9rem;
+		            font-weight: 600;
+		            cursor: pointer;
+		            transition: all 0.3s ease;
+		            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+		        }
+		        
+		        .game-btn:hover {
+		            transform: translateY(-2px);
+		            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+		        }
+		        
+		        
+		    }
+		</style>
+	</head>
+	<body>
+		<!-- 游戏挂载点 -->
+		<div id="root"></div>
+		<script type="text/babel">
+			const {useState, useEffect, useCallback} = React;
+			// 游戏状态
+			const GameStatus = ({score, highScore, speedLevel, isTemporarySpeed}) => {
+				return (
+					<div className="status-panel">
+						<div className="flex flex-wrap justify-between items-center gap-4">
+							<div className="text-center">
+								<h3 className="text-gray-700 font-bold text-lg">游戏分数</h3>
+								<p className="text-2xl font-bold text-snake-head">{score}</p>
+							</div>
+							<div className="text-center">
+								<h3 className="text-gray-700 font-bold text-lg">最高得分</h3>
+								<p className="text-2xl font-bold text-snake-head">{highScore}</p>
+							</div>
+							<div className="text-center">
+								<h3 className="text-gray-700 font-bold text-lg">速度等级</h3>
+								<p className={`text-2xl font-bold ${isTemporarySpeed ? 'text-yellow-500 animate-pulse' : 'text-snake-head'}`}>
+									{speedLevel}
+									{isTemporarySpeed && <span className="text-sm ml-1">⚡</span>}
+								</p>
+							</div>
+						</div>
+					</div>
+				)
+			}
+			
+			// 网格单元格
+			const GridCell = ({position, size}) => {
+				return (
+					<div
+						className="grid-cell"
+						style={{
+							left: `${position.x * size}%`,
+							top: `${position.y * size}%`,
+							width: `${size}%`,
+							height: `${size}%`,
+						}}
+					></div>
+				)
+			}
+
+			// 蛇身体部分
+			const SnakeSegment = ({position, size, isHead}) => {
+				return (
+					<div className={`snake-segment ${isHead ? 'snake-head' : ''}`}
+						style={{
+							left: `${position.x * size}%`,
+							top: `${position.y * size}%`,
+							width: `${size}%`,
+							height: `${size}%`,
+						}}
+					></div>
+				)
+			}
+
+			// 食物
+			const Food = ({position, size, isBonus}) => {
+				return (
+					<div 
+						className={isBonus ? 'bonus-food' : 'food'}
+						style={{
+							left: `${position.x * size}%`,
+							top: `${position.y * size}%`,
+							width: `${size * 0.8}%`,
+							height: `${size * 0.8}%`,
+							margin: `${size * 0.1}%`,
+						}}
+					></div>
+				)
+			}
+
+			// 游戏控制
+			const GameControls = ({isPlay, onStart, onPause, onResume}) => {
+				if (!isPlay) {
+					return (
+						<button 
+							onClick={onStart} 
+							className="game-btn"
+						>
+							<i className="fas fa-play mr-1"></i>开始
+						</button>
+					)
+				}
+				return (
+					<div className="flex justify-center items-center gap-2">
+						<button 
+							onClick={onPause} 
+							className="game-btn"
+						>
+							<i className="fas fa-pause mr-1"></i>暂停
+						</button>
+						<button 
+							onClick={onResume} 
+							className="game-btn"
+						>
+							<i className="fas fa-play mr-1"></i>继续
+						</button>
+					</div>
+				)
+			}
+
+			// 游戏结束模态框
+			const GameOverModal = ({score, highScore, onRestart}) => {
+				return (
+					<div className="fixed inset-0 bg-black/60 flex justify-center items-center z-50 p-2">
+						<div className="bg-white rounded-2xl shadow-2xl p-4 max-w-sm w-full text-center">
+							<div className="mb-3 text-4xl text-snake-food"><i className="fa fa-times-circle"></i></div>
+							<h2 className="text-2xl font-bold text-gray-800 mb-2">游戏结束</h2>
+							<p className="text-lg mb-1">得分：<span className="text-snake-head font-bold">{score}</span></p>
+							<p className="text-lg mb-3">最高：<span className="text-snake-head font-bold">{highScore}</span></p>
+							<button onClick={onRestart} className="game-btn w-full">
+								<i className="fas fa-play mr-1"></i>重新开始
+							</button>
+						</div>
+					</div>
+				)
+			}
+
+			// 贪吃蛇游戏
+			const SnakeGame = () => {
+				const GRID_SIZE = 20;
+				const CELL_SIZE = 100/GRID_SIZE;
+				const [snake, setSnake] = useState([
+					{x: 10, y: 10},
+					{x: 9, y: 10},
+					{x: 8, y: 10},
+				]);
+				const [direction, setDirection] = useState({x: 1 ,y: 0});
+				const [nextDirection, setNextDirection] = useState({x: 1 ,y: 0});
+				const [food, setFood] = useState({x: 15, y: 10});
+				const [bonusFood, setBonusFood] = useState(null); // 奖励食物
+				const [score, setScore] = useState(0); // 游戏分数
+				const [highScore, setHighScore] = useState(localStorage.getItem('snakeHighScore') || 0);
+				const [isPlay, setIsPlay] = useState(false); // 游戏是否开始
+				const [isPaused, setIsPaused] = useState(false); // 游戏是否暂停
+				const [gameOver, setGameOver] = useState(false); // 游戏是否结束
+				const [gameSpeed, setGameSpeed] = useState(400); // 游戏速度
+				const [speedLevel, setSpeedLevel] = useState(1);
+				const [lastMoveTime, setLastMoveTime] = useState(0); // 上次移动时间
+
+				// 生成食物
+				const genFood = () => {
+					let newPosition;
+					do {
+						newPosition = {
+							x: Math.floor(Math.random() * GRID_SIZE),
+							y: Math.floor(Math.random() * GRID_SIZE),
+						}
+					} while (snake.some(segment => segment.x === newPosition.x && segment.y === newPosition.y));
+					return newPosition;
+				}
+
+				// 开始游戏
+				const startGame = () => {
+					setSnake([
+						{x: 10, y: 10},
+						{x: 9, y: 10},
+						{x: 8, y: 10},
+					])
+					setDirection({x: 1, y: 0});
+					setNextDirection({x: 1, y: 0});
+					setFood(genFood());
+					setBonusFood(null);
+					setScore(0);
+					setIsPlay(true);
+					setIsPaused(true);
+					setGameOver(false);
+					setGameSpeed(200);
+					setSpeedLevel(1);
+					setLastMoveTime(Date.now()); // 初始化移动时间
+				}
+
+				// 暂停游戏
+				const pauseGame = () => {
+					setIsPaused(true);
+				}
+
+				// 继续游戏
+				const resumeGame = () => {
+					setIsPaused(false);
+				}
+
+				// 游戏结束
+				const endGame = () => {
+					setIsPlay(false);
+					setGameOver(true);
+					setHighScore(prev => {
+						const newHigh = Math.max(Number(prev) || 0, score);
+						localStorage.setItem('snakeHighScore', newHigh);
+						return newHigh;
+					});
+				}
+
+				// 重新开始游戏
+				const restartGame = () => {
+					startGame();
+				}
+
+				// 渲染网格函数
+				const renderGrid = () => {
+					const cells = [];
+					for (let x = 0; x < GRID_SIZE; x++) {
+						for (let y = 0; y < GRID_SIZE; y++) {
+							cells.push(
+								<GridCell 
+									key={`${x}-${y}`}
+									position={{x, y}} 
+									size={CELL_SIZE} 
+								/>
+							);
+						}
+					}
+					return cells;
+				};
+
+				// 增加速度
+				const increaseSpeed = (level) => {
+					level = Math.min(Math.floor(level), 20); // 取整
+					setSpeedLevel(prev => level);
+					setGameSpeed(prev => 200 - 10 * level); // 每级减少10ms
+				}
+
+				// 移动蛇
+				const moveSnake = useCallback(() => {
+					if (!isPlay || isPaused || gameOver) return;
+					
+					const currentTime = Date.now();
+					
+					// 应用下一帧方向
+					setDirection(prev => nextDirection);
+					const head = {
+						y: snake[0].y + nextDirection.y,
+						x: snake[0].x + nextDirection.x,
+					}
+					
+					// 检查是否撞墙或撞到自己
+					const hitWall = head.x < 0 || head.x >= GRID_SIZE || head.y < 0 || head.y >= GRID_SIZE;
+					const hitSelf = snake.some(segment => segment.x === head.x && segment.y === head.y);
+					
+					// 如果发生碰撞，检查是否在500毫秒内可以转向
+					if (hitWall || hitSelf) {
+						// 如果距离上次移动超过500毫秒，则游戏结束
+						if (currentTime - lastMoveTime >= 500) {
+							endGame();
+							return;
+						}
+						// 如果在500毫秒内，允许转向，不移动蛇
+						return;
+					}
+					
+					// 更新移动时间
+					setLastMoveTime(currentTime);
+					
+					const ateFood = head.x === food.x && head.y === food.y;
+					const ateBonusFood = bonusFood && head.x === bonusFood.x && head.y === bonusFood.y;
+					let newSnake ;
+					if (ateFood || ateBonusFood) {
+						newSnake = [head, ...snake];
+						if (ateFood) {
+							setFood(genFood());
+							setScore(prev => prev + 10);
+						} else {
+							setBonusFood(null);
+							setScore(prev => prev + 50);
+						}
+					} else {
+						newSnake = [head, ...snake.slice(0, -1)];
+					}
+					setSnake(newSnake);
+				}, [isPlay, isPaused, gameOver, nextDirection, snake, food, bonusFood, lastMoveTime])
+				
+				// 临时加速状态
+				const [isTemporarySpeed, setIsTemporarySpeed] = useState(false);
+				const [speedTimeout, setSpeedTimeout] = useState(null);
+
+				// 方向控制函数
+				const handleDirectionChange = (newDirection) => {
+					if (
+						(newDirection.x !== direction.x || newDirection.y !== direction.y) &&
+						!(newDirection.x == -direction.x || newDirection.y == -direction.y)
+					) {
+						setNextDirection(newDirection);
+					}
+					// 如果下一个方向和当前方向一致则临时加速
+					if (newDirection.x === direction.x && newDirection.y === direction.y) {
+						// 清除之前的定时器
+						if (speedTimeout) {
+							clearTimeout(speedTimeout);
+						}
+						
+						// 设置临时加速
+						setIsTemporarySpeed(true);
+						setGameSpeed(prev => prev - 100);
+						
+						// 设置恢复定时器
+						const timeout = setTimeout(() => {
+							setIsTemporarySpeed(false);
+							// 恢复到基于分数的正常速度
+							const normalSpeed = 200 - 10 * speedLevel;
+							// 长度-1
+							setSnake(prev => prev.slice(0, -1));
+							// 加速奖励
+							setScore(prev => prev + speedLevel * 2);
+							setGameSpeed(normalSpeed);
+						}, 3000);
+						
+						setSpeedTimeout(timeout);
+					}
+				}
+
+				// 生成奖励食物
+				const spawnBonusFood = () => {
+					if (!isPlay || isPaused || gameOver) return;
+					const newBonusFood = genFood();
+					setBonusFood(newBonusFood);
+					setTimeout(() => {
+						setBonusFood(null);
+					}, 5000);
+				}
+				
+				useEffect(() => {
+					if (!isPlay || isPaused || gameOver) return;
+					const iniDelay = setTimeout(spawnBonusFood, 10000);
+					const bonusInterval = setInterval(() => {
+						if (!bonusFood) {
+							spawnBonusFood();
+						}
+					}, 15000);
+					return () => {
+						clearTimeout(iniDelay);
+						clearInterval(bonusInterval);
+					}
+				}, [isPlay, isPaused, gameOver, bonusFood])
+
+				// 游戏循环
+				useEffect(() => {
+					if (!isPlay || isPaused || gameOver) return;
+					const gameLoop = setInterval(() => {
+						moveSnake();
+					}, gameSpeed);
+					// 每秒长度 -1 
+					const lengthLoop = setInterval(() => {
+						setSnake(prev => prev.slice(0, -1));
+					}, 1000);
+					return () => {
+						clearInterval(gameLoop);
+						clearInterval(lengthLoop);
+					}
+				}, [isPlay, isPaused, gameOver, gameSpeed, moveSnake])
+
+				// 速度调整
+				useEffect(() => {
+					if (!isPlay || isPaused || gameOver || isTemporarySpeed) return;
+					increaseSpeed(score / 50 + 1);
+				}, [score, isTemporarySpeed])
+
+				// 清理定时器
+				useEffect(() => {
+					return () => {
+						if (speedTimeout) {
+							clearTimeout(speedTimeout);
+						}
+					};
+				}, [speedTimeout]);
+
+				// 方向控制监听
+				useEffect(() => {
+					const handleKeyDown = (e) => {
+						if (!isPlay || gameOver) return;
+						switch(e.key) {
+							case 'ArrowUp':
+							case 'w':
+							case 'W':
+								handleDirectionChange({x: 0, y: -1});
+								break;
+							case 'ArrowDown':
+							case 's':
+							case 'S':
+								handleDirectionChange({x: 0, y: 1});
+								break;
+							case 'ArrowLeft':
+							case 'a':
+							case 'A':
+								handleDirectionChange({x: -1, y: 0});
+								break;
+							case 'ArrowRight':
+							case 'd':
+							case 'D':
+								handleDirectionChange({x: 1, y: 0});
+								break;
+						case ' ': // 空格键
+								isPaused ? resumeGame() : pauseGame();
+								break;
+							default: break;
+						}
+					}
+					window.addEventListener('keydown', handleKeyDown);
+					return () => window.removeEventListener('keydown', handleKeyDown);
+				}, [isPaused, isPlay, gameOver, direction, nextDirection]);
+
+				const [touch, setTouch] = useState(null);
+				const handleTouch = (e) => {
+					if (!isPlay || gameOver) return;
+					const touchS = e.touches[0];
+					setTouch({x: touchS.clientX, y: touchS.clientY});
+				}
+
+				const handleTouchEnd = (e) => {
+					if (!isPlay || gameOver || !touch) return;
+					const touchEnd = e.changedTouches[0];
+					const touchEndPos = {x: touchEnd.clientX, y: touchEnd.clientY};
+					const dx = touchEndPos.x - touch.x;
+					const dy = touchEndPos.y - touch.y;
+					if (Math.abs(dx) > Math.abs(dy)) {
+						dx > 0 ? handleDirectionChange({x: 1, y: 0}) : handleDirectionChange({x: -1, y: 0});
+					} else {
+						dy > 0 ? handleDirectionChange({x: 0, y: 1}) : handleDirectionChange({x: 0, y: -1});
+					}
+					setTouch(null);
+				}
+
+				// 渲染游戏
+				return (
+					<div>
+						{/* 返回主页按钮 */}
+						<div className="mb-4">
+							<a href="index.html" className="inline-flex items-center px-3 py-1 bg-gradient-to-r from-pink-500 to-blue-500 text-white rounded-lg hover:opacity-90 transition-opacity text-sm">
+								<i className="fas fa-arrow-left mr-1"></i>
+								返回
+							</a>
+						</div>
+						
+						<div className="game-container">
+							<h1 className="game-title animate__animated animate__fadeInDown">
+								🐍 贪吃蛇大冒险
+							</h1>
+							<p className="game-subtitle animate__animated animate__fadeInUp">
+								控制小蛇吃食物，避开墙壁和自己
+							</p>
+						{/* 游戏状态 */}
+						<GameStatus 
+							score={score}
+							highScore={highScore}
+							speedLevel={speedLevel}
+							isTemporarySpeed={isTemporarySpeed}
+						/>
+						{/* 游戏网格 */}
+						<div className="game-grid mb-3" onTouchStart={handleTouch} onTouchEnd={handleTouchEnd}>
+							{renderGrid()}
+							{snake.map((segment, index) => (
+								<SnakeSegment 
+									key={index}
+									position={segment}
+									size={CELL_SIZE}
+									isHead={index === 0}
+								/>
+							))}
+							{food && (
+								<Food 
+									position={food}
+									size={CELL_SIZE}
+									isBonus={false}
+								/>
+							)}
+							{bonusFood && (
+								<Food 
+									position={bonusFood}
+									size={CELL_SIZE}
+									isBonus={true}
+								/>
+							)}
+							{isPaused && (
+								<div className="absolute inset-0 bg-black/50 flex justify-center items-center">
+									<div className="bg-white rounded-xl p-4 shadow-lg">
+										<h3 className="text-xl font-bold text-gray-800">游戏暂停</h3>
+									</div>
+								</div>
+							)}
+						</div>
+						{/* 游戏控制 */}
+						<div className="text-center">
+							<GameControls
+								isPlay={isPlay}
+								onStart={startGame} 
+								onPause={pauseGame} 
+								onResume={resumeGame} 
+								onRestart={restartGame}
+							/>
+						</div>
+						{/* 游戏结束 */}
+						{gameOver && (
+							<GameOverModal 
+								score={score}
+								highScore={highScore}
+								onRestart={restartGame}
+							/>
+						)}
+						{/* 游戏提示 */}
+						{/*
+						<div className="text-center text-gray-600 text-sm mt-6">
+							<p className="mb-2">使用键盘上的箭头键或者WASD键控制蛇的移动方向，吃掉食物可以获得分数并增长</p>
+							<p className="mb-2">连续按相同方向键可以触发临时加速（3秒），并获得额外分数奖励</p>
+							<p className="mb-2">按空格键可以暂停/继续游戏</p>
+						</div>*/}
+						</div>
+					</div>
+				)
+			}
+			const root = ReactDOM.createRoot(document.getElementById('root'));
+			root.render(<SnakeGame />);
+		</script>
+	</body>
+</html>
