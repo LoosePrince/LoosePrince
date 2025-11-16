@@ -78,6 +78,60 @@ body {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
+/* 游戏中心标题夜间模式样式 */
+.dark .game-header-section {
+  background: linear-gradient(to bottom right, #2a2550, #1e3a8a) !important;
+}
+
+.dark .game-header-title {
+  color: #f3f4f6 !important;
+}
+
+.dark .game-header-icon {
+  color: #a78bfa !important;
+}
+
+.dark .game-header-subtitle {
+  color: #d1d5db !important;
+}
+
+.dark .game-header-decoration-1,
+.dark .game-header-decoration-2 {
+  background-color: #6366f1 !important;
+  opacity: 0.15 !important;
+}
+
+/* 游戏列表夜间模式样式 */
+.dark .game-list-section {
+  background-color: #1f2937 !important;
+}
+
+.dark .game-list-section h2 {
+  color: #f3f4f6 !important;
+}
+
+.dark .game-list-item {
+  background-color: transparent;
+  border-color: #4b5563 !important;
+  color: #e5e7eb !important;
+}
+
+.dark .game-list-item:hover {
+  background-color: #374151 !important;
+}
+
+.dark .game-list-item-purple:hover {
+  border-color: #a78bfa !important;
+}
+
+.dark .game-list-item-green:hover {
+  border-color: #34d399 !important;
+}
+
+.dark .game-list-item i {
+  color: #9ca3af !important;
+}
+
 .dark h2 .text-transparent {
   -webkit-text-fill-color: transparent;
 }

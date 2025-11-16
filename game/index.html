@@ -22,210 +22,38 @@
         </div>
 
         <!-- 游戏中心标题 -->
-        <section class="relative overflow-hidden bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl shadow-lg p-8 mb-12">
-            <div class="absolute -top-20 -right-20 w-40 h-40 bg-purple-300 rounded-full opacity-20"></div>
-            <div class="absolute -bottom-16 -left-16 w-32 h-32 bg-indigo-300 rounded-full opacity-20"></div>
+        <section class="game-header-section relative overflow-hidden bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl shadow-lg p-8 mb-12">
+            <div class="game-header-decoration-1 absolute -top-20 -right-20 w-40 h-40 bg-purple-300 rounded-full opacity-20"></div>
+            <div class="game-header-decoration-2 absolute -bottom-16 -left-16 w-32 h-32 bg-indigo-300 rounded-full opacity-20"></div>
             
             <div class="text-center">
-                <h1 class="text-4xl md:text-6xl font-bold text-gray-800 mb-4 tracking-tight">
-                    <i class="fas fa-gamepad mr-4 text-purple-600"></i>
+                <h1 class="game-header-title text-4xl md:text-6xl font-bold text-gray-800 mb-4 tracking-tight">
+                    <i class="game-header-icon fas fa-gamepad mr-4 text-purple-600"></i>
                     游戏中心
                 </h1>
-                <p class="text-xl text-gray-500 mb-6">欢迎来到我的游戏世界</p>
+                <p class="game-header-subtitle text-xl text-gray-500 mb-6">欢迎来到我的游戏世界</p>
                 <div class="w-20 h-1 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full mx-auto"></div>
             </div>
         </section>
 
         <!-- 游戏列表 -->
-        <section class="bg-white rounded-2xl shadow-lg p-8 mb-12 transform hover:scale-[1.01] transition-all duration-300 relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-purple-500 to-indigo-500"></div>
-            <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center">
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-indigo-500">我的游戏</span>
-                <div class="flex-grow h-px bg-gray-200 ml-4"></div>
-            </h2>
+        <section class="game-list-section bg-white rounded-2xl shadow-lg p-8 mb-12">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">我的游戏</h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- 小狐狸的魔法棋局 -->
-                <div class="game-card bg-gradient-to-br from-pink-50 to-purple-50 rounded-xl p-6 border border-pink-200 hover:shadow-lg transition-all duration-300">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-500 rounded-lg flex items-center justify-center mr-4">
-                            <i class="fas fa-chess text-white text-xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-semibold text-gray-800">小狐狸的魔法棋局</h3>
-                            <p class="text-sm text-gray-500">逆向五子棋</p>
-                        </div>
-                    </div>
-                    
-                    <p class="text-gray-600 mb-4">
-                        一款有趣的逆向五子棋游戏，与传统五子棋相反，你需要避免连成五子，同时阻止对手获胜。
-                    </p>
-                    
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="px-3 py-1 bg-pink-100 text-pink-800 rounded-full text-sm">策略</span>
-                        <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">益智</span>
-                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">单人</span>
-                    </div>
-                    
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center text-sm text-gray-500">
-                            <i class="far fa-clock mr-2"></i>
-                            <span>约5-15分钟</span>
-                        </div>
-                        <a href="reverse_gomoku.html" class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-lg hover:opacity-90 transition-opacity">
-                            <i class="fas fa-play mr-2"></i>
-                            开始游戏
-                        </a>
-                    </div>
-                </div>
-
-                <!-- 贪吃蛇大冒险 -->
-                <div class="game-card bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-200 hover:shadow-lg transition-all duration-300">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center mr-4">
-                            <i class="fas fa-snake text-white text-xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-semibold text-gray-800">贪吃蛇大冒险</h3>
-                            <p class="text-sm text-gray-500">经典贪吃蛇</p>
-                        </div>
-                    </div>
-                    
-                    <p class="text-gray-600 mb-4">
-                        控制小蛇吃食物，避开墙壁和自己。连续按相同方向键可以触发临时加速，获得额外分数奖励！
-                    </p>
-                    
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">动作</span>
-                        <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-sm">经典</span>
-                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">单人</span>
-                    </div>
-                    
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center text-sm text-gray-500">
-                            <i class="far fa-clock mr-2"></i>
-                            <span>约3-10分钟</span>
-                        </div>
-                        <a href="tcs.html" class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg hover:opacity-90 transition-opacity">
-                            <i class="fas fa-play mr-2"></i>
-                            开始游戏
-                        </a>
-                    </div>
-                </div>
-
-                <!-- 更多游戏占位 -->
-                <div class="game-card bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl p-6 border border-gray-200 opacity-75">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 bg-gradient-to-r from-gray-400 to-blue-400 rounded-lg flex items-center justify-center mr-4">
-                            <i class="fas fa-plus text-white text-xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-semibold text-gray-600">更多游戏</h3>
-                            <p class="text-sm text-gray-400">敬请期待</p>
-                        </div>
-                    </div>
-                    
-                    <p class="text-gray-500 mb-4">
-                        更多有趣的游戏正在开发中，敬请期待！
-                    </p>
-                    
-                    <div class="flex items-center justify-center h-20">
-                        <span class="text-gray-400 text-sm">即将推出...</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 游戏说明 -->
-        <section class="bg-white rounded-2xl shadow-lg p-8 mb-12 transform hover:scale-[1.01] transition-all duration-300 relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-2 h-full bg-gradient-to-b from-green-500 to-blue-500"></div>
-            <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center">
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500">游戏说明</span>
-                <div class="flex-grow h-px bg-gray-200 ml-4"></div>
-            </h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="space-y-4">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-4">小狐狸的魔法棋局</h3>
-                    <div class="space-y-3">
-                        <div class="flex items-start">
-                            <i class="fas fa-chess-pawn text-pink-500 mr-3 mt-1"></i>
-                            <div>
-                                <h4 class="font-medium text-gray-800">游戏目标</h4>
-                                <p class="text-gray-600 text-sm">避免连成五子，同时阻止对手获胜</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-mouse-pointer text-purple-500 mr-3 mt-1"></i>
-                            <div>
-                                <h4 class="font-medium text-gray-800">操作方式</h4>
-                                <p class="text-gray-600 text-sm">点击棋盘空位放置棋子</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-trophy text-yellow-500 mr-3 mt-1"></i>
-                            <div>
-                                <h4 class="font-medium text-gray-800">获胜条件</h4>
-                                <p class="text-gray-600 text-sm">对手连成五子或棋盘填满</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="space-y-4">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-4">贪吃蛇大冒险</h3>
-                    <div class="space-y-3">
-                        <div class="flex items-start">
-                            <i class="fas fa-snake text-green-500 mr-3 mt-1"></i>
-                            <div>
-                                <h4 class="font-medium text-gray-800">游戏目标</h4>
-                                <p class="text-gray-600 text-sm">控制小蛇吃食物，避开墙壁和自己</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-keyboard text-emerald-500 mr-3 mt-1"></i>
-                            <div>
-                                <h4 class="font-medium text-gray-800">操作方式</h4>
-                                <p class="text-gray-600 text-sm">方向键或WASD控制移动，空格暂停</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-bolt text-yellow-500 mr-3 mt-1"></i>
-                            <div>
-                                <h4 class="font-medium text-gray-800">特殊技能</h4>
-                                <p class="text-gray-600 text-sm">连续按相同方向键触发加速</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="mt-8">
-                <h3 class="text-xl font-semibold text-gray-800 mb-4">游戏特色</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="flex items-start">
-                        <i class="fas fa-palette text-pink-500 mr-3 mt-1"></i>
-                        <div>
-                            <h4 class="font-medium text-gray-800">精美界面</h4>
-                            <p class="text-gray-600 text-sm">可爱的主题设计</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start">
-                        <i class="fas fa-mobile-alt text-purple-500 mr-3 mt-1"></i>
-                        <div>
-                            <h4 class="font-medium text-gray-800">响应式设计</h4>
-                            <p class="text-gray-600 text-sm">支持手机和电脑端</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start">
-                        <i class="fas fa-lightbulb text-yellow-500 mr-3 mt-1"></i>
-                        <div>
-                            <h4 class="font-medium text-gray-800">策略性强</h4>
-                            <p class="text-gray-600 text-sm">需要思考的反向逻辑</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <ul class="space-y-3">
+                <li>
+                    <a href="reverse_gomoku.html" class="game-list-item game-list-item-purple flex items-center justify-between block px-4 py-3 text-gray-800 border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-purple-400 hover:shadow-md transition-all cursor-pointer">
+                        <span>小狐狸的魔法棋局</span>
+                        <i class="fas fa-chevron-right text-gray-400"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="tcs.html" class="game-list-item game-list-item-green flex items-center justify-between block px-4 py-3 text-gray-800 border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-green-400 hover:shadow-md transition-all cursor-pointer">
+                        <span>贪吃蛇大冒险</span>
+                        <i class="fas fa-chevron-right text-gray-400"></i>
+                    </a>
+                </li>
+            </ul>
         </section>
 
         <!-- 页脚 -->
